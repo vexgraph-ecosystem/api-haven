@@ -79,7 +79,7 @@ static bool appendJsonString(char *out, size_t cap, size_t *used, const char *s)
     return true;
 }
 
-// Gemini content role: assistant -> model, system -> user, else verbatim.
+// Gemini content role: assistant becomes model, system folds to user.
 static const char *mapRole(const char *role) {
     if (!role)
         return "user";
