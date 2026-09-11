@@ -34,6 +34,7 @@ add_library(api_haven STATIC
     src/com/slack/slack.c
     src/ai/ai_provider.c
     src/ai/ai_chat.c
+    src/ai/ai_sse.c
     src/database/db_provider.c
     src/harness/engine_provider.c
     src/harness/harness.c
@@ -84,6 +85,15 @@ if(NOT TARGET ai_provider_test)
         src/ai/tests/ai_provider_test.c
     )
     target_link_libraries(ai_provider_test PRIVATE api_haven)
+endif()
+
+# src/ai SSE proof: incremental data:/event: decoder, caller-fed only.
+# Headless: no sockets, no threads (see ai_sse_test.c overview).
+if(NOT TARGET ai_sse_test)
+    add_executable(ai_sse_test
+        src/ai/tests/ai_sse_test.c
+    )
+    target_link_libraries(ai_sse_test PRIVATE api_haven)
 endif()
 
 # src/database directory proof: data-source descriptors, no drivers.
