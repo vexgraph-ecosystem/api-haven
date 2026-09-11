@@ -1,4 +1,5 @@
 #include "api/client.h"
+#include "annotation/intention.h"
 #include "annotation/overview.h"
 #include "net/http.h"
 #include "net/url.h"
@@ -30,6 +31,7 @@
  *   - APIClient_sendTelemetry(endpointUrl, telemetry)
  * ============================================================================
  */
+;;INTENTION("canonical shim for the quarantined attic/APIClient.java: same sendTelemetry contract, vexspoke transports, null-safe degrade (false) — Rule 35 cold-strict")
 
 static bool parseUrl(const char *url, char *scheme, size_t schemeCap,
                      char *host, size_t hostCap, int *port,

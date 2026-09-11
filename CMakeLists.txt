@@ -14,13 +14,15 @@ elseif(UNIX)
     add_link_options($<$<CONFIG:Release>:-Wl,--gc-sections>)
 endif()
 
-# C-transition seam for the Java API surface at the repo root
-# (APIClient.java, com/discord/DiscordWebhook.java).
+# C-transition seam for the legacy Java API surface, quarantined under
+# attic/ (attic/APIClient.java; com/discord/DiscordWebhook.java was
+# reported but never present in this repo — nothing was moved for it).
 #
-# The Java originals speak the old engine stack (net/HTTPClient, net/JSON,
+# The Java originals spoke the old engine stack (net/HTTPClient, net/JSON,
 # primitive/string, nio/ForeignMemory, telemetry/CrashDumper). Their C ports
-# land in src/api/ and speak vexspoke instead: src/net (http, json,
-# netfacade, url, tls), nio/mem, primitive/string.
+# have landed in src/api/ and speak vexspoke instead: src/net (http, json,
+# netfacade, url, tls), nio/mem, primitive/string. attic/ is excluded from
+# every target below (no Java toolchain, no glob over attic/).
 #
 # Header-only until the first port lands; switch to STATIC with sources
 # as files arrive.
