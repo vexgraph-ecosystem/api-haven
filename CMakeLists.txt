@@ -40,6 +40,7 @@ add_library(api_haven STATIC
     src/asset/asset_provider.c
     src/asset/asset_broker.c
     src/database/db_provider.c
+    src/database/db_sqlite_file.c
     src/harness/engine_provider.c
     src/harness/harness.c
     src/app/app_provider.c
@@ -125,6 +126,15 @@ if(NOT TARGET db_provider_test)
         src/database/tests/db_provider_test.c
     )
     target_link_libraries(db_provider_test PRIVATE api_haven)
+endif()
+
+# src/database SQLite file proof: catalog-only read-only descriptor +
+# opaque delegation, zero sqlite3.h (see db_sqlite_file_test.c overview).
+if(NOT TARGET db_sqlite_file_test)
+    add_executable(db_sqlite_file_test
+        src/database/tests/db_sqlite_file_test.c
+    )
+    target_link_libraries(db_sqlite_file_test PRIVATE api_haven)
 endif()
 
 # Seam proof: vexspoke R1 probes (AppDetect, CaptureTool, ProcessProbe)
