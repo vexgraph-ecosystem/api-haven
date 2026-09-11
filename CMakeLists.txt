@@ -34,6 +34,8 @@ add_library(api_haven STATIC
     src/com/slack/slack.c
     src/ai/ai_provider.c
     src/ai/ai_chat.c
+    src/ai/ai_chat_anthropic.c
+    src/ai/ai_chat_gemini.c
     src/ai/ai_sse.c
     src/database/db_provider.c
     src/harness/engine_provider.c
@@ -85,6 +87,15 @@ if(NOT TARGET ai_provider_test)
         src/ai/tests/ai_provider_test.c
     )
     target_link_libraries(ai_provider_test PRIVATE api_haven)
+endif()
+
+# src/ai Shape-A sisters proof: Anthropic Messages + Gemini generateContent
+# envelopes, headless buildRequest only (see ai_chat_sisters_test.c overview).
+if(NOT TARGET ai_chat_sisters_test)
+    add_executable(ai_chat_sisters_test
+        src/ai/tests/ai_chat_sisters_test.c
+    )
+    target_link_libraries(ai_chat_sisters_test PRIVATE api_haven)
 endif()
 
 # src/ai SSE proof: incremental data:/event: decoder, caller-fed only.
