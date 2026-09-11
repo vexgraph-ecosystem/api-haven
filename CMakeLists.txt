@@ -37,6 +37,8 @@ add_library(api_haven STATIC
     src/ai/ai_chat_anthropic.c
     src/ai/ai_chat_gemini.c
     src/ai/ai_sse.c
+    src/asset/asset_provider.c
+    src/asset/asset_broker.c
     src/database/db_provider.c
     src/harness/engine_provider.c
     src/harness/harness.c
@@ -105,6 +107,16 @@ if(NOT TARGET ai_sse_test)
         src/ai/tests/ai_sse_test.c
     )
     target_link_libraries(ai_sse_test PRIVATE api_haven)
+endif()
+
+# src/asset directory proof: blessed source descriptors + bounded
+# chunked-copy broker. Headless: no network, no scraping, no exec
+# (see asset_test.c overview).
+if(NOT TARGET asset_test)
+    add_executable(asset_test
+        src/asset/tests/asset_test.c
+    )
+    target_link_libraries(asset_test PRIVATE api_haven)
 endif()
 
 # src/database directory proof: data-source descriptors, no drivers.

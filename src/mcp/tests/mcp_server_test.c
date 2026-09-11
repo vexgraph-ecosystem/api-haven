@@ -14,12 +14,12 @@
  * ============================================================================
  * Exercises McpServer_handleLine against literal client frames:
  * initialize version negotiation (supported echo / latest fallback),
- * ping, tools/list (all 10 tools with schemas), tools/call success +
+ * ping, tools/list (all 14 tools with schemas), tools/call success +
  * isError paths (incl. engine_list/app_list, unbound harness_run /
- * app_action degrade, poll of unknown jobs), resources/list + read
- * (incl. engines/apps catalogs), unknown tool/method/resource
- * errors, batch rejection, notification silence, string-id echo, and
- * parse-error handling.
+ * app_action degrade, poll of unknown jobs, asset_lookup/download),
+ * resources/list + read (incl. engines/apps/assets catalogs), unknown
+ * tool/method/resource errors, batch rejection, notification silence,
+ * string-id echo, and parse-error handling.
  *
  * Exit code 0 = all checks green; 1 = at least one check failed.
  * ============================================================================
@@ -78,7 +78,7 @@ int main(void) {
     check(strstr(out, "\"id\":\"p1\"") != NULL, "ping echoes string id with quotes");
     check(strstr(out, "\"result\":{}") != NULL, "ping has empty result");
 
-    // --- tools/list: all four tools ---------------------------------------
+    // --- tools/list: every hosted tool --------------------------------------
     r = run(srv,
         "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/list\"}",
         out, sizeof(out), "tools/list writes a response");
@@ -105,6 +105,10 @@ int main(void) {
           "tool search_list present");
     check(strstr(out, "\"name\":\"web_search\"") != NULL,
           "tool web_search present");
+    check(strstr(out, "\"name\":\"asset_lookup\"") != NULL,
+          "tool asset_lookup present");
+    check(strstr(out, "\"name\":\"asset_download\"") != NULL,
+          "tool asset_download present");
     check(strstr(out, "\"inputSchema\"") != NULL, "tool schemas advertised");
 
     // --- tools/call: app_detect list --------------------------------------
@@ -329,6 +333,58 @@ int main(void) {
     check(strstr(out, "transport error") != NULL,
           "web_search searxng names the transport failure");
 
+    // --- tools/call: asset_lookup + asset_download --------------------------
+    r = run(srv,
+        "{\"jsonrpc\":\"2.0\",\"id\":214,\"method\":\"tools/call\","
+        "\"params\":{\"name\":\"asset_lookup\",\"arguments\":{\"slug\":\"unsplash\"}}}",
+        out, sizeof(out), "asset_lookup slug writes a response");
+    check(strstr(out, "asset-source: unsplash") != NULL,
+          "asset_lookup slug renders key");
+    check(strstr(out, "license: ") != NULL,
+          "asset_lookup renders license line");
+    check(strstr(out, "\"isError\":true") == NULL,
+          "asset_lookup slug is not an error");
+
+    r = run(srv,
+        "{\"jsonrpc\":\"2.0\",\"id\":215,\"method\":\"tools/call\","
+        "\"params\":{\"name\":\"asset_lookup\",\"arguments\":{}}}",
+        out, sizeof(out), "asset_lookup bare writes a response");
+    check(strstr(out, "unsplash") != NULL && strstr(out, "kenney") != NULL,
+          "asset_lookup bare covers first and last rows");
+    check(strstr(out, "\"isError\":true") == NULL,
+          "asset_lookup bare is not an error");
+
+    r = run(srv,
+        "{\"jsonrpc\":\"2.0\",\"id\":216,\"method\":\"tools/call\","
+        "\"params\":{\"name\":\"asset_lookup\",\"arguments\":{\"slug\":\"nope\"}}}",
+        out, sizeof(out), "asset_lookup unknown writes a response");
+    check(strstr(out, "unknown asset source: nope") != NULL,
+          "asset_lookup names the unknown source");
+
+    r = run(srv,
+        "{\"jsonrpc\":\"2.0\",\"id\":217,\"method\":\"tools/call\","
+        "\"params\":{\"name\":\"asset_download\",\"arguments\":{\"slug\":\"poly-haven\","
+        "\"file\":\"fox.glb\"}}}",
+        out, sizeof(out), "asset_download writes a response");
+    check(strstr(out, "asset download plan: poly-haven") != NULL,
+          "asset_download renders plan key");
+    check(strstr(out, "cache/models/fox.glb") != NULL ||
+              strstr(out, "cache/assets/fox.glb") != NULL,
+          "asset_download renders cache path");
+    check(strstr(out, "never fetches") != NULL,
+          "asset_download states the no-fetch terms");
+    check(strstr(out, "\"isError\":true") == NULL,
+          "asset_download is not an error");
+
+    r = run(srv,
+        "{\"jsonrpc\":\"2.0\",\"id\":218,\"method\":\"tools/call\","
+        "\"params\":{\"name\":\"asset_download\",\"arguments\":{}}}",
+        out, sizeof(out), "asset_download without slug writes a response");
+    check(strstr(out, "\"isError\":true") != NULL,
+          "asset_download without a slug is an error");
+    check(strstr(out, "missing slug") != NULL,
+          "asset_download names the missing slug");
+
     // --- tools/call: unknown tool -----------------------------------------
     r = run(srv,
         "{\"jsonrpc\":\"2.0\",\"id\":14,\"method\":\"tools/call\","
@@ -346,8 +402,9 @@ int main(void) {
               strstr(out, "\"uri\":\"db://data-sources\"") != NULL &&
               strstr(out, "\"uri\":\"engines://catalog\"") != NULL &&
               strstr(out, "\"uri\":\"apps://catalog\"") != NULL &&
-              strstr(out, "\"uri\":\"search://providers\"") != NULL,
-          "all six resource URIs advertised");
+              strstr(out, "\"uri\":\"search://providers\"") != NULL &&
+              strstr(out, "\"uri\":\"assets://catalog\"") != NULL,
+          "all seven resource URIs advertised");
     check(strstr(out, "\"mimeType\":\"text/plain\"") != NULL,
           "resources carry a mime type");
 
@@ -380,6 +437,13 @@ int main(void) {
         out, sizeof(out), "search providers read writes a response");
     check(strstr(out, "SEARCH PROVIDERS (3)") != NULL,
           "search providers read renders the directory");
+
+    r = run(srv,
+        "{\"jsonrpc\":\"2.0\",\"id\":219,\"method\":\"resources/read\","
+        "\"params\":{\"uri\":\"assets://catalog\"}}",
+        out, sizeof(out), "assets catalog read writes a response");
+    check(strstr(out, "unsplash") != NULL && strstr(out, "kenney") != NULL,
+          "assets catalog renders the directory");
 
     r = run(srv,
         "{\"jsonrpc\":\"2.0\",\"id\":17,\"method\":\"resources/read\","

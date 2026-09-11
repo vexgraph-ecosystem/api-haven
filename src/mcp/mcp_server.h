@@ -11,9 +11,11 @@
 // mcp/mcp_server.h — Model Context Protocol server engine (JSON-RPC 2.0).
 //
 // The api-haven CLI/MCP layer (preferences.md Rule 17): exposes the
-// vexspoke system probes (AppDetect, CaptureTool) and the api-haven
-// catalogs (AiProvider, DbProvider) as MCP tools + resources over
-// newline-delimited JSON-RPC on stdio. Transport-agnostic core: feed it
+// vexspoke system probes (AppDetect, CaptureTool), the api-haven
+// catalogs (AiProvider, DbProvider, AssetProvider), and the bounded
+// driver seams (Harness, AppBroker, SearchProvider) as MCP tools +
+// resources over newline-delimited JSON-RPC on stdio (see kMcpTools /
+// kMcpResources in mcp_server.c for the hosted surface). Transport-agnostic core: feed it
 // one client line, it renders one response line (or none for
 // notifications). Zero allocation, caller-owned buffers, single-threaded,
 // immutable tool/resource tables behind fn-pointer handlers.

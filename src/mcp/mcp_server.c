@@ -6,6 +6,8 @@
 #include "api/rest.h"
 #include "app/app_broker.h"
 #include "app/app_provider.h"
+#include "asset/asset_broker.h"
+#include "asset/asset_provider.h"
 #include "database/db_provider.h"
 #include "harness/engine_provider.h"
 #include "harness/harness.h"
@@ -88,6 +90,12 @@
  *                          substring "query" (cap 20 matches)
  *   renderDbLookup(doc, argsRef, out, cap)     — db source by "slug",
  *                          "engine", or "query"; all rows when bare
+ *   renderAssetLookup(doc, argsRef, out, cap)  — asset source by "slug"
+ *                          or "query"; all rows when bare
+ *   renderAssetDownload(doc, argsRef, out, cap) — cache-confined download
+ *                          plan for one "slug" (+ optional "file"): license
+ *                          + attribution + cache path + chunked-copy terms;
+ *                          answers the plan, never fetches (no network)
  *   renderEngineList(doc, argsRef, out, cap) — 20 engine rows (optional
  *                          substring "query"); all rows when bare
  *   renderHarnessRun(doc, argsRef, out, cap) — async spawn: "engine" +
@@ -173,6 +181,10 @@ static bool renderSearchList(const JsonDoc *doc, JsonRef args,
                              char *out, size_t cap);
 static bool renderWebSearch(const JsonDoc *doc, JsonRef args,
                             char *out, size_t cap);
+static bool renderAssetLookup(const JsonDoc *doc, JsonRef args,
+                              char *out, size_t cap);
+static bool renderAssetDownload(const JsonDoc *doc, JsonRef args,
+                                char *out, size_t cap);
 
 // HOSTED TOOLS — the connector surface exposed to AI clients.
 static const McpToolSlot kMcpTools[] = {
@@ -322,6 +334,34 @@ static const McpToolSlot kMcpTools[] = {
         "\"required\":[\"query\"],\"additionalProperties\":false}",
         renderWebSearch,
     },
+    {
+        "asset_lookup",
+        "External asset-source directory: 12 blessed sources (Unsplash, "
+        "Pexels, Pixabay, Openverse, Wikimedia Commons, Sketchfab, "
+        "Freesound, Poly Haven, AmbientCG, OpenGameArt) plus catalog-only "
+        "rows (Kenney, Quaternius). Lookup by slug, substring query, or "
+        "list all with licenses and sample URLs. Catalog only — no "
+        "scraping, per Rule 34.",
+        "{\"type\":\"object\",\"properties\":{\"slug\":{\"type\":\"string\","
+        "\"description\":\"exact asset-source slug, e.g. unsplash\"},"
+        "\"query\":{\"type\":\"string\",\"description\":\"case-insensitive "
+        "substring\"}},\"additionalProperties\":false}",
+        renderAssetLookup,
+    },
+    {
+        "asset_download",
+        "Cache-confined download plan for one asset source: slug "
+        "(required) + file name (optional, defaults to <slug>-sample). "
+        "Answers the license family, attribution line, cache path, and "
+        "per-chunk 100ms copy terms — bytes stream via AssetBroker "
+        "chunked copies under VexHome_cache, never fetched here.",
+        "{\"type\":\"object\",\"properties\":{\"slug\":{\"type\":\"string\","
+        "\"description\":\"exact asset-source slug, e.g. poly-haven\"},"
+        "\"file\":{\"type\":\"string\",\"description\":\"cache file name, "
+        "e.g. fox.glb\"}},\"required\":[\"slug\"],"
+        "\"additionalProperties\":false}",
+        renderAssetDownload,
+    },
 };
 
 // HOSTED RESOURCES — plain-text registry dumps under stable URIs.
@@ -361,6 +401,12 @@ static const McpResourceSlot kMcpResources[] = {
         "Blessed web-search backends (3 directory rows)",
         "text/plain",
         renderSearchList,
+    },
+    {
+        "assets://catalog",
+        "Blessed external asset sources (12 directory rows)",
+        "text/plain",
+        renderAssetLookup,
     },
 };
 
@@ -1576,6 +1622,126 @@ static bool renderWebSearch(const JsonDoc *doc, JsonRef args,
                   (*title) != '\0' ? title : "(untitled)",
                   (*link) != '\0' ? link : "(no url)", text);
     }
+    return true;
+}
+
+// --- asset renderers (Rule 34 catalog surface; lookup precedent: renderDbLookup) ---
+
+static bool renderAssetLookup(const JsonDoc *doc, JsonRef args,
+                              char *out, size_t cap) {
+    size_t pos = 0;
+    AssetProvider *dir = AssetProvider_shared();
+    char slug[128];
+    char query[128];
+    const bool haveSlug = readStringArg(doc, args, "slug", slug, sizeof(slug));
+    const bool haveQuery = readStringArg(doc, args, "query", query,
+                                         sizeof(query));
+
+    if (haveSlug && (*slug) != '\0') {
+        const AssetProviderSlot *slot = AssetProvider_get(dir, slug);
+        if (!slot) {
+            appendFmt(out, cap, &pos, "unknown asset source: %s", slug);
+            return false;
+        }
+        appendFmt(out, cap, &pos, "asset-source: %s\n",
+                  AssetProvider_getSlug(dir, slot));
+        appendFmt(out, cap, &pos, "  display: %s\n",
+                  AssetProvider_getDisplayName(dir, slot));
+        const char *api = AssetProvider_getApiBase(dir, slot);
+        appendFmt(out, cap, &pos, "  api: %s\n",
+                  api ? api : "(catalog-only — curated manifest, no search API)");
+        appendFmt(out, cap, &pos, "  license: %s\n",
+                  AssetProvider_getLicenseFamily(dir, slot));
+        appendFmt(out, cap, &pos, "  sample: %s by %s\n",
+                  AssetProvider_getSampleTitle(dir, slot),
+                  AssetProvider_getSampleAuthor(dir, slot));
+        appendFmt(out, cap, &pos, "  preview: %s\n",
+                  AssetProvider_getSamplePreview(dir, slot));
+        appendFmt(out, cap, &pos, "  download: %s\n",
+                  AssetProvider_getSampleDownload(dir, slot));
+        const char *note = AssetProvider_getNote(dir, slot);
+        if (note)
+            appendFmt(out, cap, &pos, "  note: %s\n", note);
+        return true;
+    }
+
+    // bare (or query-filtered) listing of the full 12-row table
+    const uint32_t total = AssetProvider_count(dir);
+    for (uint32_t i = 0; i < total; i++) {
+        const AssetProviderSlot *slot = AssetProvider_at(dir, i);
+        if (haveQuery && (*query) != '\0') {
+            const char *sl = AssetProvider_getSlug(dir, slot);
+            const char *display = AssetProvider_getDisplayName(dir, slot);
+            const char *note = AssetProvider_getNote(dir, slot);
+            if (!containsFold(sl, query) && !containsFold(display, query) &&
+                !containsFold(note, query))
+                continue;
+        }
+        const char *api = AssetProvider_getApiBase(dir, slot);
+        appendFmt(out, cap, &pos, "- %s | %s | %s | %s\n",
+                  AssetProvider_getSlug(dir, slot),
+                  AssetProvider_getDisplayName(dir, slot),
+                  AssetProvider_getLicenseFamily(dir, slot),
+                  api != NULL ? api : "catalog-only");
+    }
+    return true;
+}
+
+static bool renderAssetDownload(const JsonDoc *doc, JsonRef args,
+                                char *out, size_t cap) {
+    size_t pos = 0;
+    AssetProvider *dir = AssetProvider_shared();
+    char slug[128];
+    char file[128];
+    if (!readStringArg(doc, args, "slug", slug, sizeof(slug)) ||
+        (*slug) == '\0') {
+        appendStr(out, cap, &pos, "missing slug: pass an asset-source slug, e.g. poly-haven");
+        return false;
+    }
+    const AssetProviderSlot *slot = AssetProvider_get(dir, slug);
+    if (!slot) {
+        appendFmt(out, cap, &pos, "unknown asset source: %s", slug);
+        return false;
+    }
+    file[0] = '\0';
+    readStringArg(doc, args, "file", file, sizeof(file));
+    char fileName[160];
+    if ((*file) == '\0') {
+        int n = snprintf(fileName, sizeof(fileName), "%s-sample",
+                         AssetProvider_getSlug(dir, slot));
+        if (n <= 0 || (size_t)n >= sizeof(fileName)) {
+            appendStr(out, cap, &pos, "file name overflow (160 cap)");
+            return false;
+        }
+    } else {
+        size_t fl = strlen(file);
+        if (fl + 1 > sizeof(fileName)) {
+            appendStr(out, cap, &pos, "file name overflow (160 cap)");
+            return false;
+        }
+        memcpy(fileName, file, fl + 1);
+    }
+    AssetBroker broker = AssetBroker_0();
+    char cachePath[256];
+    if (!AssetBroker_cachePath(&broker, fileName, cachePath, sizeof(cachePath))) {
+        appendStr(out, cap, &pos, "cache path overflow (256 cap)");
+        return false;
+    }
+    appendFmt(out, cap, &pos, "asset download plan: %s\n",
+              AssetProvider_getSlug(dir, slot));
+    appendFmt(out, cap, &pos, "  sample: %s by %s\n",
+              AssetProvider_getSampleTitle(dir, slot),
+              AssetProvider_getSampleAuthor(dir, slot));
+    appendFmt(out, cap, &pos, "  license: %s (attribution rendered before import)\n",
+              AssetProvider_getLicenseFamily(dir, slot));
+    appendFmt(out, cap, &pos, "  download: %s\n",
+              AssetProvider_getSampleDownload(dir, slot));
+    appendFmt(out, cap, &pos, "  cache: %s\n", cachePath);
+    appendStr(out, cap, &pos,
+              "  terms: bytes stream via AssetBroker 64KiB chunked copies, "
+              "per-chunk 100ms budget + cancel, VexHome_cache-confined, "
+              "closed before Memory_freeAll — this tool answers the plan, "
+              "never fetches (no network, no exec)");
     return true;
 }
 
