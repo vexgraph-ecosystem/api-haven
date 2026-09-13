@@ -9,6 +9,7 @@
 // baseUrl == NULL means "native endpoint unverified" — resolve via the
 // family default or a router override (see ai_provider.h + ai_chat.h).
 // ============================================================================
+#pragma once
 static const AiProviderSlot kAiProvidersGlobal[] = {
 
     {

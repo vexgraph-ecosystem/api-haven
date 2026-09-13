@@ -44,7 +44,7 @@
  *   AppProviderFamily family;     // transport bucket enum
  *   AppProviderAuth   auth;       // credential scheme enum
  *   const char *bundleIdOrScheme; // bundle id, CLI, or URL for the driver
- *   const char *note;             // caveat; NULL when none
+ *   const char *note;             // caveat; nullptr when none
  *
  * PRIVATE HELPERS (none — rows live in kAppProviders[] below, each row
  * carrying exactly the SLOT RECORD fields above):
@@ -215,21 +215,21 @@ uint32_t AppProvider_count(const AppProvider *self) {
 
 const AppProviderSlot *AppProvider_at(const AppProvider *self, uint32_t i) {
     if (!self)
-        return NULL;
+        return nullptr;
     if (i >= kAppProviderCount)
-        return NULL;
+        return nullptr;
     return &kAppProviders[i];
 }
 
 const AppProviderSlot *AppProvider_get(const AppProvider *self, const char *slug) {
     if (!self || !slug || (*slug) == '\0')
-        return NULL;
+        return nullptr;
     for (uint32_t i = 0; i < kAppProviderCount; i++) {
         const AppProviderSlot *slot = &kAppProviders[i];
         if ((*slot).slug && strcmp((*slot).slug, slug) == 0)
             return slot;
     }
-    return NULL;
+    return nullptr;
 }
 
 bool AppProvider_resolveTarget(const AppProvider *self,
@@ -252,13 +252,13 @@ bool AppProvider_resolveTarget(const AppProvider *self,
 const char *AppProvider_getSlug(const AppProvider *self,
                                 const AppProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).slug : NULL;
+    return slot ? (*slot).slug : nullptr;
 }
 
 const char *AppProvider_getDisplayName(const AppProvider *self,
                                        const AppProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).displayName : NULL;
+    return slot ? (*slot).displayName : nullptr;
 }
 
 AppProviderFamily AppProvider_getFamily(const AppProvider *self,
@@ -278,11 +278,11 @@ AppProviderAuth AppProvider_getAuth(const AppProvider *self,
 const char *AppProvider_getBundleIdOrScheme(const AppProvider *self,
                                             const AppProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).bundleIdOrScheme : NULL;
+    return slot ? (*slot).bundleIdOrScheme : nullptr;
 }
 
 const char *AppProvider_getNote(const AppProvider *self,
                                 const AppProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).note : NULL;
+    return slot ? (*slot).note : nullptr;
 }
