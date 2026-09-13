@@ -77,37 +77,42 @@ endif() # NOT TARGET api_haven
 #    sendEmbedWithFile/sendTextFile/sendFile + transmit() (needs net/http
 #    request with headers + bodyLen, io/file for attachments)
 
+set(API_HAVEN_TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../_tests/api-haven")
+if(NOT EXISTS "${API_HAVEN_TEST_DIR}")
+    set(API_HAVEN_TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
+endif()
+
 # Shape-A/B loopback proof: headless, no accounts (server on 127.0.0.1).
-if(NOT TARGET webhook_loopback_test)
+if(NOT TARGET webhook_loopback_test AND EXISTS "${API_HAVEN_TEST_DIR}/webhook_loopback_test.c")
     add_executable(webhook_loopback_test
-        src/tests/webhook_loopback_test.c
+        ${API_HAVEN_TEST_DIR}/webhook_loopback_test.c
     )
     target_link_libraries(webhook_loopback_test PRIVATE api_haven)
 endif()
 
 # src/ai directory proof: provider table + OpenAI-compatible envelope.
 # Headless: no network; buildRequest only (see ai_provider_test.c overview).
-if(NOT TARGET ai_provider_test)
+if(NOT TARGET ai_provider_test AND EXISTS "${API_HAVEN_TEST_DIR}/ai_provider_test.c")
     add_executable(ai_provider_test
-        src/ai/tests/ai_provider_test.c
+        ${API_HAVEN_TEST_DIR}/ai_provider_test.c
     )
     target_link_libraries(ai_provider_test PRIVATE api_haven)
 endif()
 
 # src/ai Shape-A sisters proof: Anthropic Messages + Gemini generateContent
 # envelopes, headless buildRequest only (see ai_chat_sisters_test.c overview).
-if(NOT TARGET ai_chat_sisters_test)
+if(NOT TARGET ai_chat_sisters_test AND EXISTS "${API_HAVEN_TEST_DIR}/ai_chat_sisters_test.c")
     add_executable(ai_chat_sisters_test
-        src/ai/tests/ai_chat_sisters_test.c
+        ${API_HAVEN_TEST_DIR}/ai_chat_sisters_test.c
     )
     target_link_libraries(ai_chat_sisters_test PRIVATE api_haven)
 endif()
 
 # src/ai SSE proof: incremental data:/event: decoder, caller-fed only.
 # Headless: no sockets, no threads (see ai_sse_test.c overview).
-if(NOT TARGET ai_sse_test)
+if(NOT TARGET ai_sse_test AND EXISTS "${API_HAVEN_TEST_DIR}/ai_sse_test.c")
     add_executable(ai_sse_test
-        src/ai/tests/ai_sse_test.c
+        ${API_HAVEN_TEST_DIR}/ai_sse_test.c
     )
     target_link_libraries(ai_sse_test PRIVATE api_haven)
 endif()
@@ -115,35 +120,35 @@ endif()
 # src/asset directory proof: blessed source descriptors + bounded
 # chunked-copy broker. Headless: no network, no scraping, no exec
 # (see asset_test.c overview).
-if(NOT TARGET asset_test)
+if(NOT TARGET asset_test AND EXISTS "${API_HAVEN_TEST_DIR}/asset_test.c")
     add_executable(asset_test
-        src/asset/tests/asset_test.c
+        ${API_HAVEN_TEST_DIR}/asset_test.c
     )
     target_link_libraries(asset_test PRIVATE api_haven)
 endif()
 
 # src/database directory proof: data-source descriptors, no drivers.
-if(NOT TARGET db_provider_test)
+if(NOT TARGET db_provider_test AND EXISTS "${API_HAVEN_TEST_DIR}/db_provider_test.c")
     add_executable(db_provider_test
-        src/database/tests/db_provider_test.c
+        ${API_HAVEN_TEST_DIR}/db_provider_test.c
     )
     target_link_libraries(db_provider_test PRIVATE api_haven)
 endif()
 
 # src/database SQLite file proof: catalog-only read-only descriptor +
 # opaque delegation, zero sqlite3.h (see db_sqlite_file_test.c overview).
-if(NOT TARGET db_sqlite_file_test)
+if(NOT TARGET db_sqlite_file_test AND EXISTS "${API_HAVEN_TEST_DIR}/db_sqlite_file_test.c")
     add_executable(db_sqlite_file_test
-        src/database/tests/db_sqlite_file_test.c
+        ${API_HAVEN_TEST_DIR}/db_sqlite_file_test.c
     )
     target_link_libraries(db_sqlite_file_test PRIVATE api_haven)
 endif()
 
 # Seam proof: vexspoke R1 probes (AppDetect, CaptureTool, ProcessProbe)
 # are consumed here for CLI/MCP work — never re-implemented (Rule 17).
-if(NOT TARGET probe_consumer_test)
+if(NOT TARGET probe_consumer_test AND EXISTS "${API_HAVEN_TEST_DIR}/probe_consumer_test.c")
     add_executable(probe_consumer_test
-        src/tests/probe_consumer_test.c
+        ${API_HAVEN_TEST_DIR}/probe_consumer_test.c
     )
     target_link_libraries(probe_consumer_test PRIVATE api_haven)
 endif()
@@ -157,9 +162,31 @@ if(NOT TARGET mcp_server)
     target_link_libraries(mcp_server PRIVATE api_haven)
 endif()
 
-if(NOT TARGET mcp_server_test)
+if(NOT TARGET mcp_server_test AND EXISTS "${API_HAVEN_TEST_DIR}/mcp_server_test.c")
     add_executable(mcp_server_test
-        src/mcp/tests/mcp_server_test.c
+        ${API_HAVEN_TEST_DIR}/mcp_server_test.c
     )
     target_link_libraries(mcp_server_test PRIVATE api_haven)
+endif()
+
+# Harness run & app broker tests (formerly in legacy _test)
+if(NOT TARGET harness_run_test AND EXISTS "${API_HAVEN_TEST_DIR}/harness_run_test.c")
+    add_executable(harness_run_test
+        ${API_HAVEN_TEST_DIR}/harness_run_test.c
+    )
+    target_link_libraries(harness_run_test PRIVATE api_haven)
+endif()
+
+if(NOT TARGET app_broker_test AND EXISTS "${API_HAVEN_TEST_DIR}/app_broker_test.c")
+    add_executable(app_broker_test
+        ${API_HAVEN_TEST_DIR}/app_broker_test.c
+    )
+    target_link_libraries(app_broker_test PRIVATE api_haven)
+endif()
+
+if(NOT TARGET json_flex_test AND EXISTS "${API_HAVEN_TEST_DIR}/json_flex_test.c")
+    add_executable(json_flex_test
+        ${API_HAVEN_TEST_DIR}/json_flex_test.c
+    )
+    target_link_libraries(json_flex_test PRIVATE api_haven)
 endif()
