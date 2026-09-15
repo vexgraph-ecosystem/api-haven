@@ -48,7 +48,7 @@ When integrated inside an umbrella workspace:
 # In your top-level CMakeLists.txt
 add_subdirectory(projects/api-haven)
 
-add_executable(my_app main.c)
+add_executable(my_app spoke.c)
 target_link_libraries(my_app PRIVATE api-haven vexspoke)
 ```
 
@@ -61,7 +61,7 @@ if(NOT TARGET api-haven)
     FetchContent_Declare(
         api-haven
         GIT_REPOSITORY https://github.com/vexgraph-dev/api-haven.git
-        GIT_TAG main
+        GIT_TAG spoke
     )
     FetchContent_MakeAvailable(api-haven)
 endif()
