@@ -77,7 +77,7 @@ endif() # NOT TARGET api_haven
 #    sendEmbedWithFile/sendTextFile/sendFile + transmit() (needs net/http
 #    request with headers + bodyLen, io/file for attachments)
 
-set(API_HAVEN_TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../_tests/api-haven")
+set(API_HAVEN_TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../tests/api-haven")
 if(NOT EXISTS "${API_HAVEN_TEST_DIR}")
     set(API_HAVEN_TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
 endif()
@@ -115,6 +115,15 @@ if(NOT TARGET ai_sse_test AND EXISTS "${API_HAVEN_TEST_DIR}/ai_sse_test.c")
         ${API_HAVEN_TEST_DIR}/ai_sse_test.c
     )
     target_link_libraries(ai_sse_test PRIVATE api_haven)
+endif()
+
+# src/api HavenWsFanout proof: 16-slot fanout registry over opaque handles.
+# Headless: no sockets, no threads (see haven_ws_fanout_test.c overview).
+if(NOT TARGET haven_ws_fanout_test AND EXISTS "${API_HAVEN_TEST_DIR}/haven_ws_fanout_test.c")
+    add_executable(haven_ws_fanout_test
+        ${API_HAVEN_TEST_DIR}/haven_ws_fanout_test.c
+    )
+    target_link_libraries(haven_ws_fanout_test PRIVATE api_haven)
 endif()
 
 # src/asset directory proof: blessed source descriptors + bounded
