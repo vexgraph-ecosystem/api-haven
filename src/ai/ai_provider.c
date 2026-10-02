@@ -9,7 +9,6 @@
 /**
  * ============================================================================
  * CLASS: AiProvider (ai/ai_provider)
- * LEVEL: L1 — File Metadata (Rule 28: declarative descriptors, swappable
  * with zero code changes: edit regenerate data, never touch logic)
  * ============================================================================
  * The AI provider directory: ~260 static descriptor rows for every provider

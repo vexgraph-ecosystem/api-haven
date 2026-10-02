@@ -9,7 +9,6 @@
 /**
  * ============================================================================
  * CLASS: ApiAuth (api/auth)
- * LEVEL: L2 — Behavior (credential contract for api-haven drivers)
  * ============================================================================
  * How any request authenticates, in one struct. Drivers pass an ApiAuth to
  * the Rest core instead of hand-rolling Authorization headers. All strings

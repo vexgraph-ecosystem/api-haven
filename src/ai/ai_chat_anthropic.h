@@ -9,6 +9,7 @@
 #include "ai/ai_provider.h"
 #include "api/auth.h"
 #include "net/http.h"
+#include "c23/constructor.h"
 
 // ai/ai_chat_anthropic.h — Anthropic Messages chat client (L2 behavior).
 //
@@ -35,6 +36,7 @@ typedef struct AiChatAnthropic {
 AiChatAnthropic AiChatAnthropic_0(void);              // everything NULL/0
 AiChatAnthropic AiChatAnthropic_1(const char *model); // shared table default
 AiChatAnthropic AiChatAnthropic_2(const char *model, const char *apiKey);
+#define AiChatAnthropic(...) CONSTRUCTOR_DISPATCH(AiChatAnthropic, __VA_ARGS__)
 
 // --- Core functions ---
 // Renders the request without sending: Anthropic envelope into bodyBuf,

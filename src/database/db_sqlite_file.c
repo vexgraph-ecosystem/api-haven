@@ -9,7 +9,6 @@
 /**
  * ============================================================================
  * CLASS: DbSqliteFile (database/db_sqlite_file)
- * LEVEL: L1 — File Metadata (Rule 28: declarative descriptor + opaque
  * execution seam; swappable with zero code changes)
  * ============================================================================
  * Catalog-only read-only SQLite file row for the DbProvider directory:

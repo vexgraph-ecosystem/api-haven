@@ -25,7 +25,6 @@
 /**
  * ============================================================================
  * CLASS: McpServer (mcp/mcp_server)
- * LEVEL: L3 — Module behavior (protocol engine running inside the
  * api-haven CLI/MCP tool server; no OS/window/memory management)
  * ============================================================================
  * The Model Context Protocol engine: newline-delimited JSON-RPC 2.0
@@ -654,8 +653,8 @@ static bool sSeamReady;
 static void ensureSeam(void) {
     if (sSeamReady)
         return;
-    sHarnessJobs = Harness_0();
-    sAppJobs = AppBroker_0();
+    sHarnessJobs = Harness();
+    sAppJobs = AppBroker();
     sSeamReady = true;
 }
 
@@ -1721,7 +1720,7 @@ static bool renderAssetDownload(const JsonDoc *doc, JsonRef args,
         }
         memcpy(fileName, file, fl + 1);
     }
-    AssetBroker broker = AssetBroker_0();
+    AssetBroker broker = AssetBroker();
     char cachePath[256];
     if (!AssetBroker_cachePath(&broker, fileName, cachePath, sizeof(cachePath))) {
         appendStr(out, cap, &pos, "cache path overflow (256 cap)");

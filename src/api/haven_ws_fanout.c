@@ -9,7 +9,6 @@
 /**
  * ============================================================================
  * CLASS: HavenWsFanout (api/haven_ws_fanout)
- * LEVEL: L2 — Behavior (R2 fan-out registry, R0-driven, no threads)
  * ============================================================================
  * A fixed fan-out table over opaque socket handles for the R2 layer: at
  * most 16 slots, each pairing a borrowed void* handle with its WsSource

@@ -6,6 +6,7 @@
 #include <stdint.h>
 
 #include "harness/engine_provider.h"
+#include "c23/constructor.h"
 
 // harness/harness.h — bounded CLI-engine job seam (L2 behavior).
 //
@@ -71,6 +72,7 @@ typedef struct Harness {
 // --- Constructors (value structs, zero heap — AiChat precedent) ---
 Harness Harness_0(void);                        // engine NULL, 100ms default
 Harness Harness_1(uint64_t timeoutMs);          // engine NULL, given default
+#define Harness(...) CONSTRUCTOR_DISPATCH(Harness, __VA_ARGS__)
 
 // --- Core functions ---
 // Finds a free slot (IDLE/DONE/TIMEOUT reused) or issues a fresh one;

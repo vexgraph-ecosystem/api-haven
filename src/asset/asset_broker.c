@@ -8,7 +8,6 @@
 /**
  * ============================================================================
  * CLASS: AssetBroker (asset/asset_broker)
- * LEVEL: L2 — Behavior (bounded chunked-copy downloader; caller-fed
  * chunks, caller-owned dest, per-chunk budget + cancel, zero alloc)
  * ============================================================================
  * Streams one download into the VexHome cache as bounded 64KiB chunk

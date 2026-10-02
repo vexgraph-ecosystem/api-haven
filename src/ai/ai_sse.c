@@ -8,7 +8,6 @@
 /**
  * ============================================================================
  * CLASS: AiSse (ai/ai_sse)
- * LEVEL: L2 — Behavior (pure incremental SSE decoder; caller-fed bytes,
  * R0-budgeted slot binding, zero socket/thread/alloc)
  * ============================================================================
  * Incremental Server-Sent Events decoder for AI token streams. The R0

@@ -9,7 +9,6 @@
 /**
  * ============================================================================
  * CLASS: EngineProvider (harness/engine_provider)
- * LEVEL: L1 — File Metadata (Rule 28: declarative descriptors, swappable
  * with zero code changes: edit rows, never touch logic)
  * ============================================================================
  * The CLI coding-engine directory: 20 static descriptor rows covering

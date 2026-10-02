@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include "c23/constructor.h"
 
 // database/db_sqlite_file.h — the DbSqliteFile class: catalog-only
 // read-only SQLite file descriptor (L1 metadata, R2 api-haven).
@@ -39,6 +40,7 @@ struct DbSqliteFile {
 // --- Constructors (value structs, no allocation) ---
 DbSqliteFile DbSqliteFile_0(void);           // undescribed, read-only
 DbSqliteFile DbSqliteFile_1(const char *path); // described path, read-only
+#define DbSqliteFile(...) CONSTRUCTOR_DISPATCH(DbSqliteFile, __VA_ARGS__)
 
 // --- Core functions ---
 // Bind the owner's read path (borrowed handle + table, never owned).

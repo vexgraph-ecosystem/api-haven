@@ -12,7 +12,6 @@
 /**
  * ============================================================================
  * CLASS: SlackWebhook (com/slack/slack)
- * LEVEL: L2 — Behavior (Slack incoming-webhook driver, Shape A)
  * ============================================================================
  * POSTs {"text","username","icon_url"} to a Slack incoming webhook URL via
  * the Rest core. First driver on api/rest.h: proves the core carries a

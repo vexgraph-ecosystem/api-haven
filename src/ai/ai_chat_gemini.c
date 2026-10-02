@@ -11,7 +11,6 @@
 /**
  * ============================================================================
  * CLASS: AiChatGemini (ai/ai_chat_gemini)
- * LEVEL: L2 — Behavior (class API surface: constructors, core, setters,
  * getters; consumes the L1 AiProvider directory + api/rest core)
  * ============================================================================
  * Gemini generateContent chat client — Shape-A sister of AiChat. Resolves

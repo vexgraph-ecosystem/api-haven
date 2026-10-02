@@ -10,7 +10,6 @@
 /**
  * ============================================================================
  * CLASS: AppProvider (app/app_provider)
- * LEVEL: L1 — File Metadata (Rule 28: declarative descriptors, swappable
  * with zero code changes: edit rows, never touch logic)
  * ============================================================================
  * The app/automation directory: 29 static descriptor rows covering

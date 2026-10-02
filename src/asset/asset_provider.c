@@ -9,7 +9,6 @@
 /**
  * ============================================================================
  * CLASS: AssetProvider (asset/asset_provider)
- * LEVEL: L1 — File Metadata (Rule 28: declarative descriptors, swappable
  * with zero code changes: edit rows, never touch logic)
  * ============================================================================
  * The external asset-source directory: 12 static descriptor rows over

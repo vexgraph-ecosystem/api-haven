@@ -8,7 +8,6 @@
 /**
  * ============================================================================
  * CLASS: Harness (harness/harness)
- * LEVEL: L2 — Behavior (Rule 28: slotted job seam over injected drivers)
  * ============================================================================
  * Bounded CLI-engine job seam: each job owns one slot in a fixed
  * jobs[HARNESS_MAX_JOBS] array (BitPool discipline) — a count, BUSY_FULL

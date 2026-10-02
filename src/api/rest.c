@@ -10,7 +10,6 @@
 /**
  * ============================================================================
  * CLASS: Rest (api/rest)
- * LEVEL: L2 — Behavior (single REST core for api-haven drivers)
  * ============================================================================
  * URL parsing, auth injection, and HTTP transport in one place. Drivers
  * hand over (url, auth, JSON body) and get back an HttpResponse in their

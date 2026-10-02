@@ -9,7 +9,6 @@
 /**
  * ============================================================================
  * CLASS: AppBroker (app/app_broker)
- * LEVEL: L2 — Behavior (Rule 28: slotted action seam over injected drivers)
  * ============================================================================
  * Bounded app/automation action seam: each action owns one slot in a
  * fixed jobs[APP_MAX_JOBS] array (BitPool discipline) — a count,

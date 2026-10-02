@@ -13,7 +13,6 @@
 /**
  * ============================================================================
  * CLASS: APIClient (api/client)
- * LEVEL: L2 — Behavior (telemetry client API surface)
  * ============================================================================
  * High-performance, zero-allocation API Client for the VexGraph engine.
  * Formulates off-heap JSON telemetry packets and transmits them over HTTP.

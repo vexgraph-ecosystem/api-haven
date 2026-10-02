@@ -1,15 +1,15 @@
 # api-haven — Repo-Local Living Preferences
-> Exclusive repository-level preferences (the Living Preferences Law).
+> Repo-local preferences governed by the Living Documentation Law.
 > Universal Supreme Constitution: preferences.md (vexspoke).
-
-;;SYNC("mirrors ecosystem/vexspoke/preferences.md @ 2026.09-universal")
 
 ## 0. Constitution Link (supreme)
 - [preferences.md](https://github.com/vexgraph-dev/vexspoke/blob/main/preferences.md) (canonical, vexspoke) — accessible locally at ../../preferences.md
 - All universal laws in `preferences.md` are mandatory and binding across the ecosystem.
 - This document codifies **exclusive** preferences that apply uniquely to `api-haven` (R3 API Connector).
 
-## 1. Exclusive Preferences Binding Matrix
+## 1. Repo-Local Law Index (Binding Matrix)
+
+Universal laws are inherited from the canonical `preferences.md` Index; this table indexes the additional laws specific to this repository.
 
 | Law Title | Scope | Enforcement |
 | :--- | :--- | :--- |
@@ -31,7 +31,7 @@ Legal exposure, broken trust, and brittle integrations come from scraping. A fir
 - **Catalog, not scraping.** Blessed providers: Unsplash, Pexels, Pixabay, Openverse, Wikimedia Commons, Sketchfab, Freesound, Poly Haven, AmbientCG, OpenGameArt, Google Custom Search JSON API. Each is a row in the AssetProvider registry with its public search API. Sources without a public search API (Pinterest, raw Google Images, Kenney, Quaternius, itch.io packs) are catalog-only rows with curated static manifests and hand-verified URLs, or excluded. Interface scraping is a defect.
 - **One normalized contract.** Every search result is an AssetRow (provider slug, id, title, author, license family, preview/download URLs, attribution, dimensions/duration, size). The UI never sees provider-specific shapes.
 - **License is a field, not a footnote.** Every row carries a license family; attribution is rendered before import; project export fails closed on UNKNOWN license.
-- **Downloads land in the cache.** AssetBroker_download streams into VexHome_cache(<subsystem>) with bounded timeouts (the Bounded Wait Law); cache files are shim state tracked and closed before Memory_freeAll (the Teardown Order Law). No exec, no writes outside the cache.
+- **Downloads land in the cache.** AssetBroker_download streams into VexHome_cache(<subsystem>) with bounded timeouts (the Bounded Wait Law); cache files are shim state tracked and closed before Memory_freeAll (the Vertical Integration Law (Teardown)). No exec, no writes outside the cache.
 - **The UI seam is fn-pointers.** darling hosts AssetBrowser and never includes api-haven (the Vertical Integration Law); the R5 app binds an AssetSource fn-pointer table (opaque handle + callbacks — the Conflict Triage Law canonical move).
 - **MCP surface.** asset_source_lookup / asset_search / asset_download hosted by McpServer; writes cache-confined, timeouts bounded, no exec.
 - **Credentials.** API keys via vexspoke Keychain or ASSET_KEY_<SLUG> env rendered by ApiAuth; never stored in the arena, prefs, or repo.
@@ -72,6 +72,6 @@ Network telemetry streams must not induce memory allocator churn or thread stall
 
 ---
 
-## 4. Readiness Cross-Reference (the Living Feature Readiness Law)
+## 4. Readiness Cross-Reference (Living Documentation Law)
 
 - Feature readiness matrix tracked in [`../../_repositories/.ecosystem/api-haven.md`](../../_repositories/.ecosystem/api-haven.md) (rendered as `[[api-haven]]` wiki page).

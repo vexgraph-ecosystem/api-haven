@@ -9,7 +9,6 @@
 /**
  * ============================================================================
  * CLASS: DbProvider (database/db_provider)
- * LEVEL: L1 — File Metadata (Rule 28: declarative descriptors, swappable
  * with zero code changes: edit rows, never touch logic)
  * ============================================================================
  * The database data-source directory: 25 static descriptor rows covering

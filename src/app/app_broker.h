@@ -6,6 +6,7 @@
 #include <stdint.h>
 
 #include "app/app_provider.h"
+#include "c23/constructor.h"
 
 // app/app_broker.h — bounded app/automation action seam (L2 behavior).
 //
@@ -70,6 +71,7 @@ typedef struct AppBroker {
 // --- Constructors (value structs, zero heap — Harness precedent) ---
 AppBroker AppBroker_0(void);                   // target NULL, 100ms default
 AppBroker AppBroker_1(uint64_t timeoutMs);     // target NULL, given default
+#define AppBroker(...) CONSTRUCTOR_DISPATCH(AppBroker, __VA_ARGS__)
 
 // --- Core functions ---
 // Executes one action synchronously inside the bounded driver call:

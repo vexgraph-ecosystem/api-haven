@@ -11,7 +11,6 @@
 /**
  * ============================================================================
  * CLASS: AiChat (ai/ai_chat)
- * LEVEL: L2 — Behavior (class API surface: constructors, core, setters,
  * getters; consumes the L1 AiProvider directory + api/rest core)
  * ============================================================================
  * OpenAI-compatible chat completion client. Resolves the selected provider

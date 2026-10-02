@@ -11,7 +11,6 @@
 /**
  * ============================================================================
  * CLASS: AiChatAnthropic (ai/ai_chat_anthropic)
- * LEVEL: L2 — Behavior (class API surface: constructors, core, setters,
  * getters; consumes the L1 AiProvider directory + api/rest core)
  * ============================================================================
  * Anthropic Messages chat client — Shape-A sister of AiChat. Resolves
