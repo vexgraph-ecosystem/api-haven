@@ -4,12 +4,12 @@
 
 ## 0. Constitution Link (supreme)
 - [preferences.md](https://github.com/vexgraph-dev/vexspoke/blob/main/preferences.md) (canonical, vexspoke) — accessible locally at ../../preferences.md
-- All universal laws in `preferences.md` are mandatory and binding across the ecosystem.
+- All universal laws in `../../../preferences.md` are mandatory and binding across the ecosystem.
 - This document codifies **exclusive** preferences that apply uniquely to `api-haven` (R3 API Connector).
 
 ## 1. Repo-Local Law Index (Binding Matrix)
 
-Universal laws are inherited from the canonical `preferences.md` Index; this table indexes the additional laws specific to this repository.
+Universal laws are inherited from the canonical `../../../preferences.md` Index; this table indexes the additional laws specific to this repository.
 
 | Law Title | Scope | Enforcement |
 | :--- | :--- | :--- |
@@ -47,7 +47,7 @@ All legacy Java source code and off-heap prototypes are permanently quarantined 
 Historical code preserves context but must never pollute the pure C23 compilation unit or confuse static analysis tools.
 
 #### The Rule:
-1. **No Attic Includes:** Code in `src/api/` or `src/com/` must never include headers or references from `attic/`.
+1. **No Attic Includes:** Code in `src/api` or `src/com` must never include headers or references from `attic/`.
 2. **Build Isolation:** CMake configurations ignore `attic/` completely.
 
 ---

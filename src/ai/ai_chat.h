@@ -8,7 +8,6 @@
 #include "ai/ai_provider.h"
 #include "api/auth.h"
 #include "net/http.h"
-#include "c23/constructor.h"
 
 // ai/ai_chat.h — OpenAI-compatible chat completion client (L2 behavior).
 //
@@ -36,7 +35,6 @@ typedef struct AiChat {
 AiChat AiChat_0(void);                       // everything NULL
 AiChat AiChat_1(const char *model);          // shared table, gateway default
 AiChat AiChat_2(const char *model, const char *apiKey);
-#define AiChat(...) CONSTRUCTOR_DISPATCH(AiChat, __VA_ARGS__)
 
 // --- Core functions ---
 // Renders the request without sending: OpenAI envelope into bodyBuf,

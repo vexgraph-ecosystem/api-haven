@@ -4,7 +4,6 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "c23/constructor.h"
 
 // api/haven_ws_fanout.h — the HavenWsFanout class (R2 fan-out registry).
 //
@@ -43,7 +42,6 @@ typedef struct HavenWsFanout {
 
 // Empty registry (zero rows).
 HavenWsFanout *HavenWsFanout_0(void);
-#define HavenWsFanout(...) CONSTRUCTOR_DISPATCH(HavenWsFanout, __VA_ARGS__)
 
 // Release the registry block (null-safe no-op; handles are borrowed —
 // detach first per Rule 26, never freed here).

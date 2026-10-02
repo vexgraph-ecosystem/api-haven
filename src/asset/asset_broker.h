@@ -4,7 +4,6 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "c23/constructor.h"
 
 // asset/asset_broker.h — the AssetBroker class: bounded chunked-copy
 // downloader into the VexHome cache (L2 behavior, R2 api-haven).
@@ -35,7 +34,6 @@ typedef struct AssetBroker {
 // --- Constructors (value structs, no allocation) ---
 AssetBroker AssetBroker_0(void);                    // "assets" sub, 100ms
 AssetBroker AssetBroker_1(const char *cacheSub);    // named cache slot
-#define AssetBroker(...) CONSTRUCTOR_DISPATCH(AssetBroker, __VA_ARGS__)
 
 // --- Core functions ---
 // Bounded chunked copy: one srcChunk (chunkLen bytes) into dest at the

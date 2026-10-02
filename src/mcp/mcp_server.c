@@ -653,8 +653,8 @@ static bool sSeamReady;
 static void ensureSeam(void) {
     if (sSeamReady)
         return;
-    sHarnessJobs = Harness();
-    sAppJobs = AppBroker();
+    sHarnessJobs = Harness_0();
+    sAppJobs = AppBroker_0();
     sSeamReady = true;
 }
 
@@ -1720,7 +1720,7 @@ static bool renderAssetDownload(const JsonDoc *doc, JsonRef args,
         }
         memcpy(fileName, file, fl + 1);
     }
-    AssetBroker broker = AssetBroker();
+    AssetBroker broker = AssetBroker_0();
     char cachePath[256];
     if (!AssetBroker_cachePath(&broker, fileName, cachePath, sizeof(cachePath))) {
         appendStr(out, cap, &pos, "cache path overflow (256 cap)");
@@ -1756,7 +1756,7 @@ static const McpResourceSlot *findResource(const char *uri) {
     return NULL;
 }
 
-// --- main dispatch ----------------------------------------------------------
+// --- _main dispatch ----------------------------------------------------------
 
 bool McpServer_handleLine(McpServer *self, const char *line, size_t lineLen,
                           char *outBuf, size_t outCap) {

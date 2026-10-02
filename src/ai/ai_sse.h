@@ -6,7 +6,6 @@
 #include <stdint.h>
 
 #include "api/haven_ws_fanout.h"
-#include "c23/constructor.h"
 
 // ai/ai_sse.h — the AiSse class: pure incremental SSE stream decoder
 // (L2 behavior, R2 api-haven).
@@ -39,7 +38,6 @@ typedef struct AiSse {
 
 // --- Constructor (value struct, no allocation) ---
 AiSse AiSse_0(void);
-#define AiSse(...) CONSTRUCTOR_DISPATCH(AiSse, __VA_ARGS__)
 
 // --- Core functions ---
 // Feed caller-owned bytes; decoded data: payloads append into textOut

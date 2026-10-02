@@ -9,7 +9,6 @@
 #include "ai/ai_provider.h"
 #include "api/auth.h"
 #include "net/http.h"
-#include "c23/constructor.h"
 
 // ai/ai_chat_gemini.h — Gemini generateContent chat client (L2 behavior).
 //
@@ -35,7 +34,6 @@ typedef struct AiChatGemini {
 AiChatGemini AiChatGemini_0(void);              // everything NULL
 AiChatGemini AiChatGemini_1(const char *model); // shared table default
 AiChatGemini AiChatGemini_2(const char *model, const char *apiKey);
-#define AiChatGemini(...) CONSTRUCTOR_DISPATCH(AiChatGemini, __VA_ARGS__)
 
 // --- Core functions ---
 // Renders the request without sending: Gemini envelope into bodyBuf,

@@ -7,7 +7,7 @@
 ;;OVERVIEW
 /**
  * ============================================================================
- * MODULE: mcp_main (main/mcp_main.c — thin entry point, owns zero structs;
+ * MODULE: mcp_main (_main/mcp_main.c — thin entry point, owns zero structs;
  * Rule 23 MODULE allowance: procedural stdio transport for McpServer)
  * ============================================================================
  * Model Context Protocol stdio server runner. Reads newline-delimited
@@ -23,7 +23,7 @@
  *
  * FUNCTION REGISTRY:
  * Core Functions:
- *   - main() : run the stdio loop until EOF
+ *   - _main() : run the stdio loop until EOF
  * ============================================================================
  */
 

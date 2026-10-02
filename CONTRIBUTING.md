@@ -6,7 +6,7 @@ It serves as an architectural manifesto for a **zero-allocation C23 systems libr
 
 > Legacy note: the original Java surface (`api.APIClient`, zero-GC
 > off-heap telemetry) is quarantined under `attic/` and is not built.
-> The canonical ports live in `src/api/` and `src/com/` — extend those,
+> The canonical ports live in `src/api` and `src/com` — extend those,
 > never the attic.
 
 ---
@@ -38,11 +38,11 @@ This boilerplate is **not** an accident, nor is it a misunderstanding of idiomat
 
 ---
 
-## 3. Supreme Living Document: `preferences.md` & Repo-Local Preferences
+## 3. Supreme Living Document: `../../../preferences.md` & Repo-Local Preferences
 
 All architectural rules and style invariants are governed by the central constitution:
 
-- **[preferences.md](https://github.com/vexgraph-dev/vexspoke/blob/main/preferences.md)** (tracked in `vexspoke`, accessible locally at `../../preferences.md`)
+- **[preferences.md](https://github.com/vexgraph-dev/vexspoke/blob/main/preferences.md)** (tracked in `vexspoke`, accessible locally at `../../../preferences.md`)
 - **[api-haven-preferences.md](api-haven-preferences.md)** (repo-local mirror binding api-haven)
 
-Whenever preferences or conventions evolve, `preferences.md` and `api-haven-preferences.md` are updated and committed locally in the same cycle (the Living Preferences Law / Zero Drift).
+Whenever preferences or conventions evolve, `../../../preferences.md` and `api-haven-preferences.md` are updated and committed locally in the same cycle (the Living Preferences Law / Zero Drift).
