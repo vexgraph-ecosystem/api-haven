@@ -39,7 +39,16 @@ current surfaces.
 
 ## Workspace Integration & How to Use It
 
-`api-haven` is an **R3 driver** in the supervisor order (the Vertical Integration Law), attaching to the R1 Kernel through callback seams. It depends only on `vexspoke`; it never includes a consumer's headers. The full ecosystem map lives in the workspace root `README.md` and the ecosystem wiki, not here.
+`api-haven` is an **R3 driver** in the supervisor order (the Vertical Integration
+Law), attaching to R1 through callback seams and never including consumer headers.
+Current builds consume Vexspoke. R3 may borrow either R2 public contract:
+Vexspoke CPU computation/behavior or Relational Engine memory/storage, stable
+rows, variable bindings and native C search over Rust-owned spans. Engine
+integration is not implied: migration is staged, existing Vexspoke
+memory/container ABI and default allocator remain. R1 owns residency/lifetimes;
+no C/Rust atomic-layout compatibility or automatic schema migration is assumed.
+GPU shaders/dispatch remain Graphvex R3, not this connector driver. The full
+ecosystem map lives in `../../../README.md` and the readiness wiki.
 
 ### Build
 
@@ -79,4 +88,4 @@ is not a standalone runtime build.
 * C23 compiler (Clang with `-std=gnu23`).
 * `vexspoke` runtime (for `net/http`, `net/json`, `nio/mem`, and `primitive/string`).
 * POSIX sockets or Apple SecureTransport/cURL.
-* The workspace build system, `b` (bundled at `b/`).
+* The workspace build system, `b` (bundled at `../../../personal/b`).
