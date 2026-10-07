@@ -1,11 +1,11 @@
 # api-haven — Repo-Local Living Preferences
 > Repo-local preferences governed by the Living Documentation Law.
-> Universal Supreme Constitution: preferences.md (vexspoke).
+> Universal Supreme Constitution: workspace-root preferences.md, published on Gist.
 
 ## 0. Constitution Link (supreme)
-- [preferences.md](https://github.com/vexgraph-ecosystem/vexspoke/blob/main/preferences.md) (canonical, vexspoke) — accessible locally at ../../preferences.md
+- [preferences.md](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a) — real, Git-ignored workspace-root file at ../../../preferences.md, not a tracked Vexspoke file or symlink.
 - All universal laws in `../../../preferences.md` are mandatory and binding across the ecosystem.
-- This document codifies **exclusive** preferences that apply uniquely to `api-haven` (R3 API Connector).
+- This document codifies **exclusive** preferences for `api-haven` (R3 API Connector). R3 may borrow either R2 public contract: Vexspoke CPU computation/behavior or Relational Engine memory/storage/native C search. Existing Vexspoke dependencies and default allocation remain; permission is not proof of engine integration.
 
 ## 1. Repo-Local Law Index (Binding Matrix)
 
@@ -74,4 +74,4 @@ Network telemetry streams must not induce memory allocator churn or thread stall
 
 ## 4. Readiness Cross-Reference (Living Documentation Law)
 
-- Feature readiness matrix tracked in [`../../_repositories/.ecosystem/api-haven.md`](../../_repositories/.ecosystem/api-haven.md) (rendered as `[[api-haven]]` wiki page).
+- Feature readiness matrix: [api-haven](../../ecosystem/api-haven.md), rendered as `[[api-haven]]`.
