@@ -42,7 +42,11 @@ This boilerplate is **not** an accident, nor is it a misunderstanding of idiomat
 
 All architectural rules and style invariants are governed by the central constitution:
 
-- **[preferences.md](https://github.com/vexgraph-ecosystem/vexspoke/blob/main/preferences.md)** (tracked in `vexspoke`, accessible locally at `../../../preferences.md`)
+- **[preferences.md](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a)** (one real, Git-ignored workspace-root `../../../preferences.md`, not a tracked Vexspoke file or symlink)
 - **[api-haven-preferences.md](api-haven-preferences.md)** (repo-local mirror binding api-haven)
 
-Whenever preferences or conventions evolve, `../../../preferences.md` and `api-haven-preferences.md` are updated and committed locally in the same cycle (the Living Preferences Law / Zero Drift).
+Under the Living Documentation Law, update affected contracts in the same cycle.
+Universal changes are published to the existing Gist and byte-verified; repo-local
+documentation is committed locally under the Git Workflow Law. Never auto-push.
+R3 may borrow Vexspoke CPU computation/behavior or Relational Engine storage/native
+C search public contracts; staged migration does not change the default allocator.
