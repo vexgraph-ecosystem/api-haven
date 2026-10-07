@@ -1,5 +1,18 @@
 # api-haven
 
+## CLion: CMake is IDE metadata only
+
+Open this repository root as a CMake project. `CMakeLists.txt` provides C23
+source targets, include paths and flags for navigation, diagnostics and inlay
+hints. Targets are excluded from the default build; no linking, dependency
+downloads or application runner are wired into it. Set `VEXSPOKE_SOURCE_DIR`
+to a local Vexspoke `src/`. Missing headers stay real IDE errors; no fake
+declarations are generated. IDE appearance is user-verified.
+
+Build with [b](https://github.com/vex-graph/b), not this adapter. From the
+Vexgraph workspace root: `./tools/b build api_haven`. IDE configuration does
+not prove standalone runtime dependency closure.
+
 Zero-allocation network endpoint schemas and off-heap API integration.
 
 `api-haven` is a lightweight, zero-GC network client and schema library built to connect the `vexgraph` ecosystem to external web services, remote dashboards, and telemetry endpoints.
@@ -31,24 +44,14 @@ current surfaces.
 ### Build
 
 ```sh
-./tools/b build          # inside the worktree: builds this repo with its graph
-b/b build c .            # standalone: the bundled build system, C adapter
+./tools/b build api_haven # from the Vexgraph workspace root
 ```
 
-### Standalone autonomy (target seam)
-A downstream repository pulls `api-haven` only when its target is not already in-tree (the Standalone Autonomy Law):
-
-```cmake
-if(NOT TARGET api-haven)
-    include(FetchContent)
-    FetchContent_Declare(
-        api-haven
-        GIT_REPOSITORY https://github.com/vexgraph-ecosystem/api-haven.git
-        GIT_TAG spoke
-    )
-    FetchContent_MakeAvailable(api-haven)
-endif()
-```
+### Standalone autonomy
+The Standalone Autonomy Law still requires runtime dependency closure. This
+IDE-only adapter exports no runtime library and never fetches dependencies;
+supply local headers with `VEXSPOKE_SOURCE_DIR`. A successful IDE configure
+is not a standalone runtime build.
 
 ---
 
@@ -67,7 +70,7 @@ endif()
 * **`mcp/mcp_server.h/.c`** — L3 Model Context Protocol engine (`McpServer`): newline-delimited JSON-RPC 2.0 server core hosting the connector surface as 14 tools (`app_detect`, `capture_status`, `ai_provider_lookup`, `db_data_source_lookup`, `engine_list`, `harness_run`, `harness_poll`, `app_list`, `app_action`, `app_poll`, `search_list`, `web_search`, `asset_lookup`, `asset_download`) and 7 resources (`system://apps`, `system://capture`, `db://data-sources`, `engines://catalog`, `apps://catalog`, `search://providers`, `assets://catalog`). Version negotiation (2024-11-05 / 2025-03-26 / 2025-06-18), verbatim id echo, notification silence, zero allocation — caller-owned buffers, single-threaded, fn-pointer tool tables. Tools read registries/probes only, no exec, no writes (protocol boundary).
 * **`../../_trash/main/mcp_main.c`** — stdio runner (`mcp_server` executable): one JSON-RPC line per stdin line, response on stdout (flushed), logs on stderr only so the JSON wire stays parseable by MCP clients (codex, Claude Code, t3, cursor, ...). EOF exits 0.
 * **`com/discord/discord.h/.c`** & **`src/api/client.c`** — C Discord webhook transmitter and API client (the canonical ports of the legacy Java surface, quarantined under `attic/` — no Java builds here).
-* **`b/`** — the workspace build system builds this repo; there is no in-repo CMake graph.
+* **`../../../personal/b`** — the actual build system; this repo's CMake file is indexing metadata only.
 
 ---
 
