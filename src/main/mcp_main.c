@@ -39,7 +39,7 @@ int main(void) {
     static char line[kLineCap];
     char response[262144]; // worst case: full capture/app-dump escape
 
-    while (fgets(line, (int)kLineCap, stdin) != NULL) {
+    while (fgets(line, (int)kLineCap, stdin) != nullptr) {
         const size_t len = strlen(line);
         // Strip the trailing newline (MCP framing is newline-delimited;
         // keep CR out of the parser too).

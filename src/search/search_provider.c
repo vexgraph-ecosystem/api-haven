@@ -87,7 +87,7 @@ static const SearchProviderSlot kSearchProviders[] = {
      SEARCH_FAMILY_SEARXNG, SEARCH_AUTH_NONE,
      "http://localhost:8888",
      "self-hosted metasearch; base overridable per call; works today (http)",
-     0, 0, 0, NULL, NULL},
+     0, 0, 0, nullptr, nullptr},
     {"google-cse", "Google Custom Search",
      SEARCH_FAMILY_GOOGLE_CSE, SEARCH_AUTH_KEY_CX,
      "https://www.googleapis.com",
@@ -97,7 +97,7 @@ static const SearchProviderSlot kSearchProviders[] = {
      SEARCH_FAMILY_MEDIAWIKI, SEARCH_AUTH_NONE,
      "https://en.wikipedia.org",
      "keyless MediaWiki API; https needs TLS backend",
-     0, 0, 0, NULL, "CC-BY-SA"},
+     0, 0, 0, nullptr, "CC-BY-SA"},
 };
 
 static const uint32_t kSearchProviderCount =
@@ -121,21 +121,21 @@ uint32_t SearchProvider_count(const SearchProvider *self) {
 
 const SearchProviderSlot *SearchProvider_at(const SearchProvider *self, uint32_t i) {
     if (!self)
-        return NULL;
+        return nullptr;
     if (i >= kSearchProviderCount)
-        return NULL;
+        return nullptr;
     return &kSearchProviders[i];
 }
 
 const SearchProviderSlot *SearchProvider_get(const SearchProvider *self, const char *slug) {
     if (!self || !slug || (*slug) == '\0')
-        return NULL;
+        return nullptr;
     for (uint32_t i = 0; i < kSearchProviderCount; i++) {
         const SearchProviderSlot *slot = &kSearchProviders[i];
         if ((*slot).slug && strcmp((*slot).slug, slug) == 0)
             return slot;
     }
-    return NULL;
+    return nullptr;
 }
 
 bool SearchProvider_resolveEndpoint(const SearchProvider *self,
@@ -158,13 +158,13 @@ bool SearchProvider_resolveEndpoint(const SearchProvider *self,
 const char *SearchProvider_getSlug(const SearchProvider *self,
                                    const SearchProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).slug : NULL;
+    return slot ? (*slot).slug : nullptr;
 }
 
 const char *SearchProvider_getDisplayName(const SearchProvider *self,
                                           const SearchProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).displayName : NULL;
+    return slot ? (*slot).displayName : nullptr;
 }
 
 SearchProviderFamily SearchProvider_getFamily(const SearchProvider *self,
@@ -184,13 +184,13 @@ SearchProviderAuth SearchProvider_getAuth(const SearchProvider *self,
 const char *SearchProvider_getEndpoint(const SearchProvider *self,
                                        const SearchProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).endpoint : NULL;
+    return slot ? (*slot).endpoint : nullptr;
 }
 
 const char *SearchProvider_getNote(const SearchProvider *self,
                                    const SearchProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).note : NULL;
+    return slot ? (*slot).note : nullptr;
 }
 
 uint32_t SearchProvider_getQuotaPerDay(const SearchProvider *self,
@@ -217,11 +217,11 @@ int64_t SearchProvider_getResetUnix(const SearchProvider *self,
 const char *SearchProvider_getAuthKind(const SearchProvider *self,
                                        const SearchProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).authKind : NULL;
+    return slot ? (*slot).authKind : nullptr;
 }
 
 const char *SearchProvider_getLicenseFamily(const SearchProvider *self,
                                             const SearchProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).licenseFamily : NULL;
+    return slot ? (*slot).licenseFamily : nullptr;
 }

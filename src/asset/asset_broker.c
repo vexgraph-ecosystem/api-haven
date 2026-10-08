@@ -11,7 +11,7 @@
  * chunks, caller-owned dest, per-chunk budget + cancel, zero alloc)
  * ============================================================================
  * Streams one download into the VexHome cache as bounded 64KiB chunk
- * copies: the host feeds srcChunk bytes (decoded through the R1
+ * copies: the host feeds srcChunk Bytes (decoded through the R1
  * ProcessSpawn shape, never fetched here) and this broker copies them
  * into the caller-owned dest buffer at the *usedLen cursor. Each chunk
  * runs under its own 100ms budget with a cancel flag — a dead source
@@ -28,7 +28,7 @@
  *   char cacheSub[ASSET_BROKER_CACHE_SUB_CAP]; // VexHome_cache slot (64)
  *   uint64_t chunkBudgetMs;                    // per-chunk bound (dflt 100)
  *   bool cancelled;                            // cancel flag: copy degrades
- *   uint32_t bytesCopied;                      // lifetime copied bytes
+ *   uint32_t bytesCopied;                      // lifetime copied Bytes
  *
  * FUNCTION REGISTRY:
  * ----------------------------------------------------------------------------

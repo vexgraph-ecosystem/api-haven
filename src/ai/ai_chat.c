@@ -200,21 +200,21 @@ void AiChat_setBaseUrl(AiChat *self, const char *baseUrlOverride) {
 // GETTERS
 
 const AiProvider *AiChat_getProvider(const AiChat *self) {
-    return self ? (*self).provider : NULL;
+    return self ? (*self).provider : nullptr;
 }
 
 const AiProviderSlot *AiChat_getPeer(const AiChat *self) {
-    return self ? (*self).peer : NULL;
+    return self ? (*self).peer : nullptr;
 }
 
 const char *AiChat_getModel(const AiChat *self) {
-    return self ? (*self).model : NULL;
+    return self ? (*self).model : nullptr;
 }
 
 const char *AiChat_getApiKey(const AiChat *self) {
-    return self ? (*self).apiKey : NULL;
+    return self ? (*self).apiKey : nullptr;
 }
 
 const char *AiChat_getBaseUrl(const AiChat *self) {
-    return self ? (*self).baseUrlOverride : NULL;
+    return self ? (*self).baseUrlOverride : nullptr;
 }

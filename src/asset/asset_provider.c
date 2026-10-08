@@ -173,7 +173,7 @@ static const AssetProviderSlot kAssetProviders[] = {
     {
         "kenney",
         "Kenney",
-        NULL,
+        nullptr,
         "CC0",
         "Platformer art deluxe pack",
         "Kenney",
@@ -184,7 +184,7 @@ static const AssetProviderSlot kAssetProviders[] = {
     {
         "quaternius",
         "Quaternius",
-        NULL,
+        nullptr,
         "CC0",
         "Ultimate platformer pack",
         "Quaternius",
@@ -215,63 +215,63 @@ uint32_t AssetProvider_count(const AssetProvider *self) {
 
 const AssetProviderSlot *AssetProvider_at(const AssetProvider *self, uint32_t i) {
     if (!self || i >= kAssetProviderCount)
-        return NULL;
+        return nullptr;
     return &kAssetProviders[i];
 }
 
 const AssetProviderSlot *AssetProvider_get(const AssetProvider *self, const char *slug) {
     if (!self || !slug || (*slug) == '\0')
-        return NULL;
+        return nullptr;
     for (uint32_t i = 0; i < kAssetProviderCount; i++) {
         if (kAssetProviders[i].slug && strcmp(kAssetProviders[i].slug, slug) == 0)
             return &kAssetProviders[i];
     }
-    return NULL;
+    return nullptr;
 }
 
 // GETTERS
 
 const char *AssetProvider_getSlug(const AssetProvider *self, const AssetProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).slug : NULL;
+    return slot ? (*slot).slug : nullptr;
 }
 
 const char *AssetProvider_getDisplayName(const AssetProvider *self, const AssetProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).displayName : NULL;
+    return slot ? (*slot).displayName : nullptr;
 }
 
 const char *AssetProvider_getApiBase(const AssetProvider *self, const AssetProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).apiBase : NULL;
+    return slot ? (*slot).apiBase : nullptr;
 }
 
 const char *AssetProvider_getLicenseFamily(const AssetProvider *self, const AssetProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).licenseFamily : NULL;
+    return slot ? (*slot).licenseFamily : nullptr;
 }
 
 const char *AssetProvider_getSampleTitle(const AssetProvider *self, const AssetProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).sampleTitle : NULL;
+    return slot ? (*slot).sampleTitle : nullptr;
 }
 
 const char *AssetProvider_getSampleAuthor(const AssetProvider *self, const AssetProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).sampleAuthor : NULL;
+    return slot ? (*slot).sampleAuthor : nullptr;
 }
 
 const char *AssetProvider_getSamplePreview(const AssetProvider *self, const AssetProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).samplePreview : NULL;
+    return slot ? (*slot).samplePreview : nullptr;
 }
 
 const char *AssetProvider_getSampleDownload(const AssetProvider *self, const AssetProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).sampleDownload : NULL;
+    return slot ? (*slot).sampleDownload : nullptr;
 }
 
 const char *AssetProvider_getNote(const AssetProvider *self, const AssetProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).note : NULL;
+    return slot ? (*slot).note : nullptr;
 }

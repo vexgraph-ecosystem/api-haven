@@ -24,7 +24,7 @@
 typedef struct HavenWsSource {
     bool (*connect)(void *handle);
     uint32_t (*poll)(void *handle, uint64_t budgetMs);
-    bool (*send)(void *handle, const uint8_t *bytes, uint32_t len);
+    bool (*send)(void *handle, const uint8_t *Bytes, uint32_t len);
     void (*close)(void *handle);
 } HavenWsSource;
 

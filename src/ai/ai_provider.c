@@ -113,31 +113,31 @@ uint32_t AiProvider_count(const AiProvider *self) {
 
 const AiProviderSlot *AiProvider_at(const AiProvider *self, uint32_t i) {
     if (!self)
-        return NULL;
+        return nullptr;
     for (uint32_t g = 0; g < kAiProviderGroupCount; g++) {
         if (i < kAiProviderGroupSizes[g])
             return &kAiProviderGroups[g][i];
         i -= kAiProviderGroupSizes[g];
     }
-    return NULL;
+    return nullptr;
 }
 
 const AiProviderSlot *AiProvider_get(const AiProvider *self, const char *slug) {
     if (!self || !slug || (*slug) == '\0')
-        return NULL;
+        return nullptr;
     const uint32_t total = AiProvider_count(self);
     for (uint32_t i = 0; i < total; i++) {
         const AiProviderSlot *slot = AiProvider_at(self, i);
         if ((*slot).slug && strcmp((*slot).slug, slug) == 0)
             return slot;
     }
-    return NULL;
+    return nullptr;
 }
 
 const char *AiProvider_resolveBaseUrl(const AiProvider *self,
                                       const AiProviderSlot *slot) {
     if (!self || !slot)
-        return NULL;
+        return nullptr;
     if ((*slot).baseUrl)
         return (*slot).baseUrl;
     switch ((*slot).family) {
@@ -157,17 +157,17 @@ const char *AiProvider_resolveBaseUrl(const AiProvider *self,
 
 const char *AiProvider_getSlug(const AiProvider *self, const AiProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).slug : NULL;
+    return slot ? (*slot).slug : nullptr;
 }
 
 const char *AiProvider_getDisplayName(const AiProvider *self, const AiProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).displayName : NULL;
+    return slot ? (*slot).displayName : nullptr;
 }
 
 const char *AiProvider_getBaseUrl(const AiProvider *self, const AiProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).baseUrl : NULL;
+    return slot ? (*slot).baseUrl : nullptr;
 }
 
 AiProviderFamily AiProvider_getFamily(const AiProvider *self, const AiProviderSlot *slot) {
@@ -190,7 +190,7 @@ AiProviderRegion AiProvider_getRegion(const AiProvider *self, const AiProviderSl
 
 const char *AiProvider_getNote(const AiProvider *self, const AiProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).note : NULL;
+    return slot ? (*slot).note : nullptr;
 }
 
 uint32_t AiProvider_getQuotaPerDay(const AiProvider *self, const AiProviderSlot *slot) {
@@ -213,10 +213,10 @@ int64_t AiProvider_getResetUnix(const AiProvider *self, const AiProviderSlot *sl
 
 const char *AiProvider_getAuthKind(const AiProvider *self, const AiProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).authKind : NULL;
+    return slot ? (*slot).authKind : nullptr;
 }
 
 const char *AiProvider_getLicenseFamily(const AiProvider *self, const AiProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).licenseFamily : NULL;
+    return slot ? (*slot).licenseFamily : nullptr;
 }

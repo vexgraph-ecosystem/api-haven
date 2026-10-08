@@ -136,7 +136,7 @@
 ;;INTENTION("id echo is a raw token slice of the client line (numbers and strings, quotes preserved); null/missing id ⇒ notification, no response — per JSON-RPC 2.0")
 ;;INTENTION("privacy wall documented in renderCaptureStatus: macOS has no public API for other apps' ScreenCaptureKit sessions — liveness is the honest contract")
 
-// One tool handler: writes the plain-text tool body into out (cap bytes).
+// One tool handler: writes the plain-text tool body into out (cap Bytes).
 // Return true = success (isError false), false = failure (isError true).
 typedef bool (*McpToolFn)(const JsonDoc *doc, JsonRef args,
                           char *out, size_t cap);
@@ -352,7 +352,7 @@ static const McpToolSlot kMcpTools[] = {
         "Cache-confined download plan for one asset source: slug "
         "(required) + file name (optional, defaults to <slug>-sample). "
         "Answers the license family, attribution line, cache path, and "
-        "per-chunk 100ms copy terms — bytes stream via AssetBroker "
+        "per-chunk 100ms copy terms — Bytes stream via AssetBroker "
         "chunked copies under VexHome_cache, never fetched here.",
         "{\"type\":\"object\",\"properties\":{\"slug\":{\"type\":\"string\","
         "\"description\":\"exact asset-source slug, e.g. poly-haven\"},"
@@ -613,7 +613,7 @@ static void stripHtmlTags(char *dst, size_t dcap, const char *src) {
     dst[o] = '\0';
 }
 
-// Percent-encode one query component: unreserved bytes pass through,
+// Percent-encode one query component: unreserved Bytes pass through,
 // everything else becomes %XX (space ⇒ %20, never +). False when out
 // is too small — the caller degrades instead of sending a corrupt URL.
 static bool encodeQueryComponent(const char *src, char *out, size_t cap) {
@@ -996,7 +996,7 @@ static bool renderCaptureStatus(const JsonDoc *doc, JsonRef args,
             const CaptureSlot *slot = CaptureTool_at(tools, i);
             if (CaptureTool_getKind(tools, slot) != kinds[s])
                 continue;
-            const bool isDriver = CaptureTool_getProcKey(tools, slot) == NULL;
+            const bool isDriver = CaptureTool_getProcKey(tools, slot) == nullptr;
             appendFmt(out, cap, &pos, "- %s | %s | running=%d installed=%d%s\n",
                       CaptureTool_getSlug(tools, slot),
                       CaptureTool_getDisplayName(tools, slot),
@@ -1081,7 +1081,7 @@ static bool renderAiLookup(const JsonDoc *doc, JsonRef args,
                       sl, AiProvider_getDisplayName(dir, slot),
                       familyName(AiProvider_getFamily(dir, slot)),
                       authName(AiProvider_getAuth(dir, slot)),
-                      resolved != NULL ? resolved : "?");
+                      resolved != nullptr ? resolved : "?");
             shown++;
         }
     }
@@ -1255,7 +1255,7 @@ static bool renderHarnessPoll(const JsonDoc *doc, JsonRef args,
     }
     uint32_t jobId = (uint32_t)idNum;
     HarnessStatus st = Harness_poll(&sHarnessJobs, jobId);
-    const HarnessJob *job = NULL;
+    const HarnessJob *job = nullptr;
     if (jobId >= 1) {
         uint32_t count = Harness_getJobCount(&sHarnessJobs);
         for (uint32_t i = 0; i < count; i++) {
@@ -1365,7 +1365,7 @@ static bool renderAppAction(const JsonDoc *doc, JsonRef args,
                   AppProvider_getSlug(dir, slot), action);
         return false;
     }
-    const AppJob *job = NULL;
+    const AppJob *job = nullptr;
     uint32_t count = AppBroker_getJobCount(&sAppJobs);
     for (uint32_t i = 0; i < count; i++) {
         const AppJob *cand = AppBroker_getJobAt(&sAppJobs, i);
@@ -1394,7 +1394,7 @@ static bool renderAppPoll(const JsonDoc *doc, JsonRef args,
     }
     uint32_t jobId = (uint32_t)idNum;
     AppStatus st = AppBroker_poll(&sAppJobs, jobId);
-    const AppJob *job = NULL;
+    const AppJob *job = nullptr;
     uint32_t count = AppBroker_getJobCount(&sAppJobs);
     for (uint32_t i = 0; i < count; i++) {
         const AppJob *cand = AppBroker_getJobAt(&sAppJobs, i);
@@ -1568,7 +1568,7 @@ static bool renderWebSearch(const JsonDoc *doc, JsonRef args,
     JsonDoc rdoc;
     if (!Json_parse(&rdoc, nodes, 256, scratch, sizeof(scratch), fetch)) {
         appendFmt(out, cap, &pos,
-                  "provider '%s' returned non-JSON (first 80 bytes: %.80s)",
+                  "provider '%s' returned non-JSON (first 80 Bytes: %.80s)",
                   SearchProvider_getSlug(dir, slot), fetch);
         return false;
     }
@@ -1681,7 +1681,7 @@ static bool renderAssetLookup(const JsonDoc *doc, JsonRef args,
                   AssetProvider_getSlug(dir, slot),
                   AssetProvider_getDisplayName(dir, slot),
                   AssetProvider_getLicenseFamily(dir, slot),
-                  api != NULL ? api : "catalog-only");
+                  api != nullptr ? api : "catalog-only");
     }
     return true;
 }
@@ -1737,7 +1737,7 @@ static bool renderAssetDownload(const JsonDoc *doc, JsonRef args,
               AssetProvider_getSampleDownload(dir, slot));
     appendFmt(out, cap, &pos, "  cache: %s\n", cachePath);
     appendStr(out, cap, &pos,
-              "  terms: bytes stream via AssetBroker 64KiB chunked copies, "
+              "  terms: Bytes stream via AssetBroker 64KiB chunked copies, "
               "per-chunk 100ms budget + cancel, VexHome_cache-confined, "
               "closed before Memory_freeAll — this tool answers the plan, "
               "never fetches (no network, no exec)");
@@ -1748,12 +1748,12 @@ static bool renderAssetDownload(const JsonDoc *doc, JsonRef args,
 
 static const McpResourceSlot *findResource(const char *uri) {
     if (!uri)
-        return NULL;
+        return nullptr;
     for (size_t i = 0; i < kMcpResourceCount; i++) {
         if (strcmp(kMcpResources[i].uri, uri) == 0)
             return &kMcpResources[i];
     }
-    return NULL;
+    return nullptr;
 }
 
 // --- _main dispatch ----------------------------------------------------------
@@ -1849,7 +1849,7 @@ bool McpServer_handleLine(McpServer *self, const char *line, size_t lineLen,
             respondError(-32602, "Unknown tool", idS, outBuf, outCap);
             return true;
         }
-        const McpToolSlot *tool = NULL;
+        const McpToolSlot *tool = nullptr;
         for (size_t i = 0; i < kMcpToolCount; i++) {
             if (strcmp(kMcpTools[i].name, toolName) == 0) {
                 tool = &kMcpTools[i];
@@ -1895,15 +1895,15 @@ McpServer *McpServer_shared(void) {
 // GETTERS
 
 const char *McpServer_getName(const McpServer *self) {
-    return self ? self->name : NULL;
+    return self ? (*self).name : nullptr;
 }
 
 const char *McpServer_getVersion(const McpServer *self) {
-    return self ? self->version : NULL;
+    return self ? (*self).version : nullptr;
 }
 
 const char *McpServer_getProtocolVersion(const McpServer *self) {
-    return self ? (*self).protocolVersion : NULL;
+    return self ? (*self).protocolVersion : nullptr;
 }
 
 bool McpServer_isInitialized(const McpServer *self) {

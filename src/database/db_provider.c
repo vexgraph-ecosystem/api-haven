@@ -13,7 +13,7 @@
  * ============================================================================
  * The database data-source directory: 25 static descriptor rows covering
  * the databases with complete driver support (JetBrains data-source
- * dialog, "_docs/img.png"), each with a canonical slug, verbatim display
+ * dialog, "_docs/fop.png"), each with a canonical slug, verbatim display
  * name, driver/engine key, canonical wire port, coarse wire family, and
  * an optional note. One table, linear lookups, zero allocation,
  * immutable (thread-safe reads without locks).
@@ -84,46 +84,46 @@ uint32_t DbProvider_count(const DbProvider *self) {
 
 const DbProviderSlot *DbProvider_at(const DbProvider *self, uint32_t i) {
     if (!self || i >= kDbProviderCount)
-        return NULL;
+        return nullptr;
     return &kDbProviders[i];
 }
 
 const DbProviderSlot *DbProvider_get(const DbProvider *self, const char *slug) {
     if (!self || !slug || (*slug) == '\0')
-        return NULL;
+        return nullptr;
     for (uint32_t i = 0; i < kDbProviderCount; i++) {
         if (kDbProviders[i].slug && strcmp(kDbProviders[i].slug, slug) == 0)
             return &kDbProviders[i];
     }
-    return NULL;
+    return nullptr;
 }
 
 const DbProviderSlot *DbProvider_findByEngine(const DbProvider *self,
                                               const char *engine) {
     if (!self || !engine || (*engine) == '\0')
-        return NULL;
+        return nullptr;
     for (uint32_t i = 0; i < kDbProviderCount; i++) {
         if (kDbProviders[i].engine && strcmp(kDbProviders[i].engine, engine) == 0)
             return &kDbProviders[i];
     }
-    return NULL;
+    return nullptr;
 }
 
 // GETTERS
 
 const char *DbProvider_getSlug(const DbProvider *self, const DbProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).slug : NULL;
+    return slot ? (*slot).slug : nullptr;
 }
 
 const char *DbProvider_getDisplayName(const DbProvider *self, const DbProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).displayName : NULL;
+    return slot ? (*slot).displayName : nullptr;
 }
 
 const char *DbProvider_getEngine(const DbProvider *self, const DbProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).engine : NULL;
+    return slot ? (*slot).engine : nullptr;
 }
 
 uint16_t DbProvider_getDefaultPort(const DbProvider *self, const DbProviderSlot *slot) {
@@ -140,5 +140,5 @@ DbProviderFamily DbProvider_getFamily(const DbProvider *self, const DbProviderSl
 
 const char *DbProvider_getNote(const DbProvider *self, const DbProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).note : NULL;
+    return slot ? (*slot).note : nullptr;
 }

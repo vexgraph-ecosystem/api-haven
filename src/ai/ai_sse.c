@@ -12,7 +12,7 @@
  * ============================================================================
  * Incremental Server-Sent Events decoder for AI token streams. The R0
  * host polls exactly one bound HavenWsFanout slot in 100ms slices
- * (HavenWsFanout_pollStep) and feeds the delivered bytes here with
+ * (HavenWsFanout_pollStep) and feeds the delivered Bytes here with
  * AiSse_feed — this file never touches a socket, spawns a thread, or
  * allocates. Feed parses `event:` / `data:` lines (`:` comments
  * ignored, `\r` stripped), joins multi-line `data:` payloads with
@@ -29,7 +29,7 @@
  *   bool cancelled;                  // cancel flag: feed degrades to false
  *   bool done;                       // true once a "[DONE]" event dispatches
  *   char lineBuf[AI_SSE_LINE_CAP];   // partial line staging (no alloc)
- *   uint32_t lineLen;                // staged bytes in lineBuf
+ *   uint32_t lineLen;                // staged Bytes in lineBuf
  *   char eventBuf[AI_SSE_EVENT_CAP]; // current event name ("message" default,
  *                                    // sticky until the next event: line)
  *
@@ -39,7 +39,7 @@
  *   - AiSse_0()
  *
  * Core Functions:
- *   - AiSse_feed(self, bytes, byteLen, textOut, textCap, outTruncated)
+ *   - AiSse_feed(self, Bytes, byteLen, textOut, textCap, outTruncated)
  *   - AiSse_bind(self, handle, source)
  *   - AiSse_unbind(self)
  *   - AiSse_reset(self)
@@ -60,7 +60,7 @@
  *   - AiSse_getEvent(self, out, outCap)
  * ============================================================================
  */
-;;INTENTION("fanout-slot SSE binding: AiSse borrows one HavenWsFanout slot via the existing WsSource table — R0 owns the socket, R1 owns the transport, this class only decodes caller-fed bytes (Rule 33 canonical move, Tier 1 preserved)")
+;;INTENTION("fanout-slot SSE binding: AiSse borrows one HavenWsFanout slot via the existing WsSource table — R0 owns the socket, R1 owns the transport, this class only decodes caller-fed Bytes (Rule 33 canonical move, Tier 1 preserved)")
 
 // --- static helpers ---------------------------------------------------------
 
@@ -147,7 +147,7 @@ AiSse AiSse_0(void) {
 
 // CORE FUNCTIONS
 
-bool AiSse_feed(AiSse *self, const char *bytes, size_t byteLen,
+bool AiSse_feed(AiSse *self, const char *Bytes, size_t byteLen,
                 char *textOut, size_t textCap, bool *outTruncated) {
     if (self == nullptr)
         return false;
@@ -161,14 +161,14 @@ bool AiSse_feed(AiSse *self, const char *bytes, size_t byteLen,
         return false;
     if (textOut == nullptr || textCap == 0)
         return false;
-    if (byteLen > 0 && bytes == nullptr)
+    if (byteLen > 0 && Bytes == nullptr)
         return false;
     textOut[0] = '\0';
     size_t used = 0;
     bool hasData = false;
     bool dispatched = false;
     for (size_t i = 0; i < byteLen; i++) {
-        char c = bytes[i];
+        char c = Bytes[i];
         if (c == '\n') {
             size_t llen = (*self).lineLen;
             if (llen > 0 && (*self).lineBuf[llen - 1] == '\r')

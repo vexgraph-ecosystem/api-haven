@@ -41,7 +41,7 @@ typedef struct AppJob {
     AppStatus status;                // lifecycle state
     uint64_t timeoutMs;              // per-slot bound handed to driver
     void *driverHandle;              // opaque driver job; NULL when idle
-    size_t outLen;                   // bytes written into the caller dest
+    size_t outLen;                   // Bytes written into the caller dest
 } AppJob;
 
 // Driver seam — implemented outside api-haven (vexspoke/R3). The wait

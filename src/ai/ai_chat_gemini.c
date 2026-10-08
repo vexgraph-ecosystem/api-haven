@@ -212,21 +212,21 @@ void AiChatGemini_setBaseUrl(AiChatGemini *self, const char *baseUrlOverride) {
 // GETTERS
 
 const AiProvider *AiChatGemini_getProvider(const AiChatGemini *self) {
-    return self ? (*self).provider : NULL;
+    return self ? (*self).provider : nullptr;
 }
 
 const AiProviderSlot *AiChatGemini_getPeer(const AiChatGemini *self) {
-    return self ? (*self).peer : NULL;
+    return self ? (*self).peer : nullptr;
 }
 
 const char *AiChatGemini_getModel(const AiChatGemini *self) {
-    return self ? (*self).model : NULL;
+    return self ? (*self).model : nullptr;
 }
 
 const char *AiChatGemini_getApiKey(const AiChatGemini *self) {
-    return self ? (*self).apiKey : NULL;
+    return self ? (*self).apiKey : nullptr;
 }
 
 const char *AiChatGemini_getBaseUrl(const AiChatGemini *self) {
-    return self ? (*self).baseUrlOverride : NULL;
+    return self ? (*self).baseUrlOverride : nullptr;
 }

@@ -39,7 +39,7 @@
  *   AppStatus status;               // lifecycle state
  *   uint64_t timeoutMs;             // per-slot bound for the driver
  *   void *driverHandle;             // opaque driver job; nullptr when idle
- *   size_t outLen;                  // bytes written into the caller dest
+ *   size_t outLen;                  // Bytes written into the caller dest
  *
  * PRIVATE HELPERS (none — slot scan is inline in AppBroker_action):
  * ----------------------------------------------------------------------------

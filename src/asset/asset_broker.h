@@ -10,7 +10,7 @@
 //
 // Downloads land in the cache, never anywhere else: the host resolves
 // VexHome_cache(<subsystem>) and hands this broker caller-owned chunk
-// bytes plus a caller-owned dest buffer. Each chunk copies under a
+// Bytes plus a caller-owned dest buffer. Each chunk copies under a
 // per-chunk 100ms budget with a cancel flag — never a whole-file
 // budget (Rule 27: a dead source drops one chunk, not the teardown).
 // Truncation is never silent: dest overflow returns false and sets the
@@ -28,7 +28,7 @@ typedef struct AssetBroker {
     char cacheSub[ASSET_BROKER_CACHE_SUB_CAP]; // VexHome_cache subsystem slot
     uint64_t chunkBudgetMs;                    // per-chunk bound (default 100)
     bool cancelled;                            // cancel flag: copy degrades false
-    uint32_t bytesCopied;                      // lifetime copied bytes (counter)
+    uint32_t bytesCopied;                      // lifetime copied Bytes (counter)
 } AssetBroker;
 
 // --- Constructors (value structs, no allocation) ---
@@ -36,8 +36,8 @@ AssetBroker AssetBroker_0(void);                    // "assets" sub, 100ms
 AssetBroker AssetBroker_1(const char *cacheSub);    // named cache slot
 
 // --- Core functions ---
-// Bounded chunked copy: one srcChunk (chunkLen bytes) into dest at the
-// *usedLen cursor (in/out, bytes already resident). Returns true on a
+// Bounded chunked copy: one srcChunk (chunkLen Bytes) into dest at the
+// *usedLen cursor (in/out, Bytes already resident). Returns true on a
 // copied chunk. Drop-degrade false on NULL self/args, cancelled, zero
 // budget, chunkLen past ASSET_BROKER_CHUNK_CAP, or dest overflow — the
 // overflow path sets the flag (dest-last, Rule 9). NULL flag degrades.

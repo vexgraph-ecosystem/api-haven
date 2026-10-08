@@ -116,12 +116,12 @@ bool Harness_run(Harness *self, const char *prompt, size_t promptLen,
         (*self).jobCount++;
     }
     uint64_t bound = timeoutMs != 0 ? timeoutMs : (*self).timeoutMs;
-    void *handle = NULL;
+    void *handle = nullptr;
     bool ok = table.spawnFn(driver, engine, prompt, promptLen, bound, &handle);
     HarnessJob *slot = &(*self).jobs[(uint32_t) freeIndex];
     if (!ok) {
         (*slot).status = HARNESS_STATUS_IDLE;
-        (*slot).driverHandle = NULL;
+        (*slot).driverHandle = nullptr;
         (*self).lastStatus = HARNESS_STATUS_IDLE;
         return false;
     }
@@ -152,7 +152,7 @@ HarnessStatus Harness_poll(Harness *self, uint32_t jobId) {
         if (now != HARNESS_STATUS_RUNNING && now != HARNESS_STATUS_BUSY_FULL) {
             (*job).status = now;
             if (now == HARNESS_STATUS_IDLE)
-                (*job).driverHandle = NULL;
+                (*job).driverHandle = nullptr;
         }
         return (*job).status;
     }
@@ -172,7 +172,7 @@ bool Harness_cancel(Harness *self, uint32_t jobId) {
         if (table.cancelFn)
             table.cancelFn((*self).driver, (*job).driverHandle);
         (*job).status = HARNESS_STATUS_IDLE;
-        (*job).driverHandle = NULL;
+        (*job).driverHandle = nullptr;
         return true;
     }
     return false;
@@ -202,11 +202,11 @@ void Harness_setTimeout(Harness *self, uint64_t timeoutMs) {
 // GETTERS
 
 const EngineProviderSlot *Harness_getEngine(const Harness *self) {
-    return self ? (*self).engine : NULL;
+    return self ? (*self).engine : nullptr;
 }
 
 void *Harness_getDriver(const Harness *self) {
-    return self ? (*self).driver : NULL;
+    return self ? (*self).driver : nullptr;
 }
 
 uint64_t Harness_getTimeout(const Harness *self) {
@@ -234,9 +234,9 @@ uint32_t Harness_getJobCount(const Harness *self) {
 
 const HarnessJob *Harness_getJobAt(const Harness *self, uint32_t i) {
     if (!self)
-        return NULL;
+        return nullptr;
     if (i >= (*self).jobCount)
-        return NULL;
+        return nullptr;
     return &(*self).jobs[i];
 }
 

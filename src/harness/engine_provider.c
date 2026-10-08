@@ -148,21 +148,21 @@ uint32_t EngineProvider_count(const EngineProvider *self) {
 
 const EngineProviderSlot *EngineProvider_at(const EngineProvider *self, uint32_t i) {
     if (!self)
-        return NULL;
+        return nullptr;
     if (i >= kEngineProviderCount)
-        return NULL;
+        return nullptr;
     return &kEngineProviders[i];
 }
 
 const EngineProviderSlot *EngineProvider_get(const EngineProvider *self, const char *slug) {
     if (!self || !slug || (*slug) == '\0')
-        return NULL;
+        return nullptr;
     for (uint32_t i = 0; i < kEngineProviderCount; i++) {
         const EngineProviderSlot *slot = &kEngineProviders[i];
         if ((*slot).slug && strcmp((*slot).slug, slug) == 0)
             return slot;
     }
-    return NULL;
+    return nullptr;
 }
 
 bool EngineProvider_resolveCli(const EngineProvider *self,
@@ -185,19 +185,19 @@ bool EngineProvider_resolveCli(const EngineProvider *self,
 const char *EngineProvider_getSlug(const EngineProvider *self,
                                    const EngineProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).slug : NULL;
+    return slot ? (*slot).slug : nullptr;
 }
 
 const char *EngineProvider_getDisplayName(const EngineProvider *self,
                                           const EngineProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).displayName : NULL;
+    return slot ? (*slot).displayName : nullptr;
 }
 
 const char *EngineProvider_getCliName(const EngineProvider *self,
                                       const EngineProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).cliName : NULL;
+    return slot ? (*slot).cliName : nullptr;
 }
 
 EngineProviderFamily EngineProvider_getFamily(const EngineProvider *self,
@@ -217,5 +217,5 @@ EngineProviderAuth EngineProvider_getAuth(const EngineProvider *self,
 const char *EngineProvider_getNote(const EngineProvider *self,
                                    const EngineProviderSlot *slot) {
     (void)self;
-    return slot ? (*slot).note : NULL;
+    return slot ? (*slot).note : nullptr;
 }

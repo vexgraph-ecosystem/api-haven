@@ -10,8 +10,8 @@
 // ai/ai_sse.h — the AiSse class: pure incremental SSE stream decoder
 // (L2 behavior, R2 api-haven).
 //
-// Caller-fed bytes only: the R0 host polls one bound HavenWsFanout slot
-// (100ms slices via HavenWsFanout_pollStep) and feeds the delivered bytes
+// Caller-fed Bytes only: the R0 host polls one bound HavenWsFanout slot
+// (100ms slices via HavenWsFanout_pollStep) and feeds the delivered Bytes
 // here with AiSse_feed. No sockets, no threads, no allocation, no logging
 // on the feed path (Rule 35 hot-minimal: one nullptr entry guard only).
 // Truncation is never silent: textOut overflow returns false and sets the
@@ -32,7 +32,7 @@ typedef struct AiSse {
     bool cancelled;                      // cancel flag: feed degrades to false
     bool done;                           // true once a "[DONE]" event dispatches
     char lineBuf[AI_SSE_LINE_CAP];       // partial line staging (no alloc)
-    uint32_t lineLen;                    // staged bytes in lineBuf
+    uint32_t lineLen;                    // staged Bytes in lineBuf
     char eventBuf[AI_SSE_EVENT_CAP];     // current event name ("message" default)
 } AiSse;
 
@@ -40,12 +40,12 @@ typedef struct AiSse {
 AiSse AiSse_0(void);
 
 // --- Core functions ---
-// Feed caller-owned bytes; decoded data: payloads append into textOut
+// Feed caller-owned Bytes; decoded data: payloads append into textOut
 // (NUL-terminated, events separated by "\n"). Returns true when at least
-// one event dispatched. Drop-degrade false on NULL self/bytes(out,cap),
+// one event dispatched. Drop-degrade false on NULL self/Bytes(out,cap),
 // cancelled, "[DONE]"-already-seen, or textCap overflow (flag set).
 // outTruncated is last (dest-last, Rule 9); NULL flag = degrade silently.
-bool AiSse_feed(AiSse *self, const char *bytes, size_t byteLen,
+bool AiSse_feed(AiSse *self, const char *Bytes, size_t byteLen,
                 char *textOut, size_t textCap, bool *outTruncated);
 // Explicit one-slot binding over the existing WsSource table (Rule 33
 // canonical move): borrows handle + table, never closes/frees (detach

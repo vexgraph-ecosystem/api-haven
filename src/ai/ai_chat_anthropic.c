@@ -215,23 +215,23 @@ void AiChatAnthropic_setMaxTokens(AiChatAnthropic *self, uint32_t maxTokens) {
 // GETTERS
 
 const AiProvider *AiChatAnthropic_getProvider(const AiChatAnthropic *self) {
-    return self ? (*self).provider : NULL;
+    return self ? (*self).provider : nullptr;
 }
 
 const AiProviderSlot *AiChatAnthropic_getPeer(const AiChatAnthropic *self) {
-    return self ? (*self).peer : NULL;
+    return self ? (*self).peer : nullptr;
 }
 
 const char *AiChatAnthropic_getModel(const AiChatAnthropic *self) {
-    return self ? (*self).model : NULL;
+    return self ? (*self).model : nullptr;
 }
 
 const char *AiChatAnthropic_getApiKey(const AiChatAnthropic *self) {
-    return self ? (*self).apiKey : NULL;
+    return self ? (*self).apiKey : nullptr;
 }
 
 const char *AiChatAnthropic_getBaseUrl(const AiChatAnthropic *self) {
-    return self ? (*self).baseUrlOverride : NULL;
+    return self ? (*self).baseUrlOverride : nullptr;
 }
 
 uint32_t AiChatAnthropic_getMaxTokens(const AiChatAnthropic *self) {
