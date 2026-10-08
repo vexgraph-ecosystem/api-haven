@@ -5,7 +5,7 @@
 ## 0. Constitution Link (supreme)
 - [preferences.md](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a) — real, Git-ignored workspace-root file at ../../../preferences.md, not a tracked Vexspoke file or symlink.
 - All universal laws in `../../../preferences.md` are mandatory and binding across the ecosystem.
-- This document codifies **exclusive** preferences for `api-haven` (R3 API Connector). R3 may borrow either R2 public contract: Vexspoke CPU computation/behavior or Relational Engine memory/storage/native C search. Existing Vexspoke dependencies and default allocation remain; permission is not proof of engine integration.
+- This document codifies **exclusive** preferences for `api-haven` (R3 API Connector). R3 borrows Vexspoke CPU computation/behavior and Relational Engine memory/storage contracts. The default production build resolves migrated IO/NIO from RE, preserving the native Memory ABI; this is not a Rust allocator rewrite. Network/connector semantics remain API-owned.
 
 ## 1. Repo-Local Law Index (Binding Matrix)
 
