@@ -44,8 +44,8 @@ Law), attaching to R1 through callback seams and never including consumer header
 Current builds consume Vexspoke. R3 may borrow either R2 public contract:
 Vexspoke CPU computation/behavior or Relational Engine memory/storage, stable
 rows, variable bindings and native C search over Rust-owned spans. Engine
-integration is not implied: migration is staged, existing Vexspoke
-memory/container ABI and default allocator remain. R1 owns residency/lifetimes;
+native IO/NIO is linked by default, preserving the C ABI, not rewritten into Rust.
+Broader collection migration remains staged. R1 owns residency/lifetimes;
 no C/Rust atomic-layout compatibility or automatic schema migration is assumed.
 GPU shaders/dispatch remain Graphvex R3, not this connector driver. The full
 ecosystem map lives in `../../../README.md` and the readiness wiki.
