@@ -49,4 +49,5 @@ Under the Living Documentation Law, update affected contracts in the same cycle.
 Universal changes are published to the existing Gist and byte-verified; repo-local
 documentation is committed locally under the Git Workflow Law. Never auto-push.
 R3 may borrow Vexspoke CPU computation/behavior or Relational Engine storage/native
-C search public contracts; staged migration does not change the default allocator.
+C search public contracts. Production native IO/NIO now comes from RE by default,
+with preserved C allocation semantics, not a Rust allocator rewrite.
