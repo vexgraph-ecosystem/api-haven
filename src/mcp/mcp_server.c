@@ -415,6 +415,7 @@ static const size_t kMcpResourceCount =
 
 // --- bounded builders -------------------------------------------------------
 
+/** Appends as much of s as fits and keeps the destination NUL-terminated. */
 static void appendStr(char *buf, size_t cap, size_t *pos, const char *s) {
     if ((*pos) >= cap)
         return;
@@ -427,6 +428,7 @@ static void appendStr(char *buf, size_t cap, size_t *pos, const char *s) {
     buf[*pos] = '\0';
 }
 
+/** Formats text at the current output position, clamping the cursor to capacity. */
 static void appendFmt(char *buf, size_t cap, size_t *pos, const char *fmt, ...) {
     if ((*pos) >= cap)
         return;
@@ -443,6 +445,7 @@ static void appendFmt(char *buf, size_t cap, size_t *pos, const char *fmt, ...) 
 
 // --- enum → label maps ------------------------------------------------------
 
+/** Maps an AI provider family enum to its protocol-facing label. */
 static const char *familyName(AiProviderFamily f) {
     switch (f) {
         case AI_PROVIDER_FAMILY_OPENAI_COMPAT: return "openai-compat";
@@ -454,6 +457,7 @@ static const char *familyName(AiProviderFamily f) {
     return "?";
 }
 
+/** Maps an AI provider auth enum to its protocol-facing label. */
 static const char *authName(AiProviderAuth a) {
     switch (a) {
         case AI_PROVIDER_AUTH_BEARER:    return "bearer";
@@ -465,6 +469,7 @@ static const char *authName(AiProviderAuth a) {
     return "?";
 }
 
+/** Maps an AI provider region enum to its display label. */
 static const char *regionName(AiProviderRegion r) {
     switch (r) {
         case AI_PROVIDER_REGION_GLOBAL: return "global";
@@ -475,6 +480,7 @@ static const char *regionName(AiProviderRegion r) {
     return "?";
 }
 
+/** Maps a database provider family enum to its display label. */
 static const char *dbFamilyName(DbProviderFamily f) {
     switch (f) {
         case DB_PROVIDER_FAMILY_SQL:        return "sql";
@@ -485,6 +491,7 @@ static const char *dbFamilyName(DbProviderFamily f) {
     return "?";
 }
 
+/** Maps a capture kind enum to its display label. */
 static const char *kindName(CaptureKind kind) {
     switch (kind) {
         case CAPTURE_KIND_SCREEN: return "screen";
@@ -494,6 +501,7 @@ static const char *kindName(CaptureKind kind) {
     return "?";
 }
 
+/** Maps a CLI engine family enum to its display label. */
 static const char *engineFamilyName(EngineProviderFamily f) {
     switch (f) {
         case ENGINE_PROVIDER_FAMILY_CLI:    return "cli";
@@ -503,6 +511,7 @@ static const char *engineFamilyName(EngineProviderFamily f) {
     return "?";
 }
 
+/** Maps an engine authentication enum to its display label. */
 static const char *engineAuthName(EngineProviderAuth a) {
     switch (a) {
         case ENGINE_PROVIDER_AUTH_NONE:    return "none";
@@ -513,6 +522,7 @@ static const char *engineAuthName(EngineProviderAuth a) {
     return "?";
 }
 
+/** Maps an app automation family enum to its display label. */
 static const char *appFamilyName(AppProviderFamily f) {
     switch (f) {
         case APP_PROVIDER_FAMILY_OSA_SCRIPT:    return "osa-script";
@@ -525,6 +535,7 @@ static const char *appFamilyName(AppProviderFamily f) {
     return "?";
 }
 
+/** Maps an app authentication enum to its display label. */
 static const char *appAuthName(AppProviderAuth a) {
     switch (a) {
         case APP_PROVIDER_AUTH_NONE:   return "none";
@@ -534,6 +545,7 @@ static const char *appAuthName(AppProviderAuth a) {
     return "?";
 }
 
+/** Maps a harness job status enum to its response label. */
 static const char *harnessStatusName(HarnessStatus s) {
     switch (s) {
         case HARNESS_STATUS_IDLE:      return "IDLE";
@@ -545,6 +557,7 @@ static const char *harnessStatusName(HarnessStatus s) {
     return "?";
 }
 
+/** Maps an app action status enum to its response label. */
 static const char *appStatusName(AppStatus s) {
     switch (s) {
         case APP_STATUS_IDLE:      return "IDLE";
@@ -556,6 +569,7 @@ static const char *appStatusName(AppStatus s) {
     return "?";
 }
 
+/** Maps a search provider family enum to its display label. */
 static const char *searchFamilyName(SearchProviderFamily f) {
     switch (f) {
         case SEARCH_FAMILY_SEARXNG:    return "searxng";
@@ -565,6 +579,7 @@ static const char *searchFamilyName(SearchProviderFamily f) {
     return "?";
 }
 
+/** Maps a search authentication enum to its display label. */
 static const char *searchAuthName(SearchProviderAuth a) {
     switch (a) {
         case SEARCH_AUTH_NONE:   return "none";
@@ -575,6 +590,7 @@ static const char *searchAuthName(SearchProviderAuth a) {
 
 // Copy a JSON string view into a caller buffer (NUL always, silent
 // truncation past cap). False on non-string refs or empty caps.
+/** Copies a JSON string node to out, truncating at capacity and terminating it. */
 static bool copyJsonString(const JsonDoc *doc, JsonRef ref,
                            char *out, size_t cap) {
     if (!out || cap == 0)
@@ -593,6 +609,7 @@ static bool copyJsonString(const JsonDoc *doc, JsonRef ref,
 
 // Drop <...> spans in place (MediaWiki search snippets ship HTML).
 // Always NUL-terminated; never grows the text.
+/** Copies source text while removing spans enclosed by angle brackets. */
 static void stripHtmlTags(char *dst, size_t dcap, const char *src) {
     if (!dst || dcap == 0)
         return;
@@ -616,6 +633,7 @@ static void stripHtmlTags(char *dst, size_t dcap, const char *src) {
 // Percent-encode one query component: unreserved Bytes pass through,
 // everything else becomes %XX (space ⇒ %20, never +). False when out
 // is too small — the caller degrades instead of sending a corrupt URL.
+/** Percent-encodes a URL query component into a bounded output buffer. */
 static bool encodeQueryComponent(const char *src, char *out, size_t cap) {
     static const char *hex = "0123456789ABCDEF";
     if (!src || !out || cap == 0)
@@ -650,6 +668,7 @@ static Harness sHarnessJobs;
 static AppBroker sAppJobs;
 static bool sSeamReady;
 
+/** Lazily initializes the file-static harness and app broker instances once. */
 static void ensureSeam(void) {
     if (sSeamReady)
         return;
@@ -658,11 +677,13 @@ static void ensureSeam(void) {
     sSeamReady = true;
 }
 
+/** Binds the host-provided driver context and callbacks for harness jobs. */
 void McpServer_bindHarnessDriver(void *driverCtx, HarnessDriverTable table) {
     ensureSeam();
     Harness_setDriver(&sHarnessJobs, driverCtx, table);
 }
 
+/** Binds the host-provided driver context and callbacks for app actions. */
 void McpServer_bindAppDriver(void *driverCtx, AppDriverTable table) {
     ensureSeam();
     AppBroker_setDriver(&sAppJobs, driverCtx, table);
@@ -670,6 +691,7 @@ void McpServer_bindAppDriver(void *driverCtx, AppDriverTable table) {
 
 // --- string helpers ---------------------------------------------------------
 
+/** Tests for an ASCII case-insensitive substring match. */
 static bool containsFold(const char *haystack, const char *needle) {
     if (!haystack || !needle)
         return false;
@@ -698,6 +720,7 @@ static bool containsFold(const char *haystack, const char *needle) {
     return false;
 }
 
+/** Escapes JSON string characters into the supplied output buffer. */
 static void escapeJsonText(const char *src, char *out, size_t cap) {
     size_t o = 0;
     for (const char *p = src; *p && o + 6 < cap; p++) {
@@ -716,6 +739,7 @@ static void escapeJsonText(const char *src, char *out, size_t cap) {
     out[o] = '\0';
 }
 
+/** Compares a parsed JSON string method value with an exact method name. */
 static bool methodIs(const JsonDoc *doc, JsonRef method, const char *want) {
     uint32_t len = 0;
     const char *s = Json_string(doc, method, &len);
@@ -727,6 +751,7 @@ static bool methodIs(const JsonDoc *doc, JsonRef method, const char *want) {
 
 // Copy one numeric argument from an args subobject. Returns false when
 // the member is absent or not a number (outNum untouched; args < 0 ⇒ false).
+/** Reads a numeric member from an argument object without changing output on failure. */
 static bool readNumberArg(const JsonDoc *doc, JsonRef args,
                           const char *key, double *outNum) {
     if (args < 0 || !outNum)
@@ -740,6 +765,7 @@ static bool readNumberArg(const JsonDoc *doc, JsonRef args,
 
 // Copy one string argument from an args subobject. Returns false when the
 // member is absent or not a string (out stays ""). Safe for args < 0.
+/** Copies a string member from an argument object into a bounded buffer. */
 static bool readStringArg(const JsonDoc *doc, JsonRef args,
                           const char *key, char *out, size_t cap) {
     out[0] = '\0';
@@ -763,6 +789,7 @@ static bool readStringArg(const JsonDoc *doc, JsonRef args,
 // JSON-RPC 2.0 (a quoted string id keeps its quotes; a bare numeric id or
 // "null" literal is copied as-is). Returns false when absent so the caller
 // treats the message as a notification.
+/** Copies the JSON-RPC id token verbatim for echoing in the response. */
 static bool rawIdExtract(const char *line, size_t lineLen,
                          char *out, size_t cap) {
     if (!line || !out || cap == 0)
@@ -832,6 +859,7 @@ static bool rawIdExtract(const char *line, size_t lineLen,
 
 // --- error envelope ---------------------------------------------------------
 
+/** Writes a JSON-RPC error response using the supplied code, message, and id. */
 static void respondError(int code, const char *message, const char *id,
                          char *out, size_t cap) {
     size_t pos = 0;
@@ -843,6 +871,7 @@ static void respondError(int code, const char *message, const char *id,
 
 // --- plain responses --------------------------------------------------------
 
+/** Writes the empty successful JSON-RPC response used for ping. */
 static void respondPing(const char *id, char *out, size_t cap) {
     size_t pos = 0;
     appendStr(out, cap, &pos, "{\"jsonrpc\":\"2.0\",\"id\":");
@@ -850,6 +879,7 @@ static void respondPing(const char *id, char *out, size_t cap) {
     appendStr(out, cap, &pos, ",\"result\":{}}");
 }
 
+/** Serializes the static hosted-tool registry as a JSON-RPC result. */
 static void respondToolsList(const char *id, char *out, size_t cap) {
     size_t pos = 0;
     appendStr(out, cap, &pos, "{\"jsonrpc\":\"2.0\",\"id\":");
@@ -869,6 +899,7 @@ static void respondToolsList(const char *id, char *out, size_t cap) {
     appendStr(out, cap, &pos, "]}}");
 }
 
+/** Serializes the static resource registry as a JSON-RPC result. */
 static void respondResourcesList(const char *id, char *out, size_t cap) {
     size_t pos = 0;
     appendStr(out, cap, &pos, "{\"jsonrpc\":\"2.0\",\"id\":");
@@ -888,6 +919,7 @@ static void respondResourcesList(const char *id, char *out, size_t cap) {
     appendStr(out, cap, &pos, "]}}");
 }
 
+/** Negotiates a supported MCP version and emits the initialize response. */
 static bool respondInitializeReal(McpServer *self, const JsonDoc *doc,
                                   const char *id, char *out, size_t cap) {
     // negotiate: echo a supported client version, else our latest
@@ -927,6 +959,7 @@ static bool respondInitializeReal(McpServer *self, const JsonDoc *doc,
 
 // --- tool renderers (plain text bodies) -------------------------------------
 
+/** Renders known application presence, optionally for one requested app. */
 static bool renderAppDetect(const JsonDoc *doc, JsonRef args,
                             char *out, size_t cap) {
     size_t pos = 0;
@@ -970,6 +1003,7 @@ static bool renderAppDetect(const JsonDoc *doc, JsonRef args,
     return true;
 }
 
+/** Renders capture-tool process liveness, optionally filtered by capture kind. */
 static bool renderCaptureStatus(const JsonDoc *doc, JsonRef args,
                                 char *out, size_t cap) {
     size_t pos = 0;
@@ -1016,6 +1050,7 @@ static bool renderCaptureStatus(const JsonDoc *doc, JsonRef args,
     return true;
 }
 
+/** Renders an exact AI-provider lookup or a bounded substring result list. */
 static bool renderAiLookup(const JsonDoc *doc, JsonRef args,
                            char *out, size_t cap) {
     size_t pos = 0;
@@ -1089,6 +1124,7 @@ static bool renderAiLookup(const JsonDoc *doc, JsonRef args,
     return true;
 }
 
+/** Renders database-source lookup results by slug, engine, or substring. */
 static bool renderDbLookup(const JsonDoc *doc, JsonRef args,
                            char *out, size_t cap) {
     size_t pos = 0;
@@ -1161,6 +1197,7 @@ static bool renderDbLookup(const JsonDoc *doc, JsonRef args,
     return true;
 }
 
+/** Renders the engine catalog, optionally filtered by a substring query. */
 static bool renderEngineList(const JsonDoc *doc, JsonRef args,
                              char *out, size_t cap) {
     size_t pos = 0;
@@ -1191,6 +1228,7 @@ static bool renderEngineList(const JsonDoc *doc, JsonRef args,
     return true;
 }
 
+/** Admits a bounded harness job and renders its id or an observable rejection. */
 static bool renderHarnessRun(const JsonDoc *doc, JsonRef args,
                              char *out, size_t cap) {
     size_t pos = 0;
@@ -1243,6 +1281,7 @@ static bool renderHarnessRun(const JsonDoc *doc, JsonRef args,
     return true;
 }
 
+/** Renders the stored status for a previously issued harness job id. */
 static bool renderHarnessPoll(const JsonDoc *doc, JsonRef args,
                               char *out, size_t cap) {
     size_t pos = 0;
@@ -1278,6 +1317,7 @@ static bool renderHarnessPoll(const JsonDoc *doc, JsonRef args,
     return true;
 }
 
+/** Renders the app automation catalog, optionally filtered by query. */
 static bool renderAppList(const JsonDoc *doc, JsonRef args,
                           char *out, size_t cap) {
     size_t pos = 0;
@@ -1308,6 +1348,7 @@ static bool renderAppList(const JsonDoc *doc, JsonRef args,
     return true;
 }
 
+/** Runs a bounded app action and renders its result, output, or rejection. */
 static bool renderAppAction(const JsonDoc *doc, JsonRef args,
                             char *out, size_t cap) {
     size_t pos = 0;
@@ -1382,6 +1423,7 @@ static bool renderAppAction(const JsonDoc *doc, JsonRef args,
     return true;
 }
 
+/** Renders the stored status for a previously issued app action id. */
 static bool renderAppPoll(const JsonDoc *doc, JsonRef args,
                           char *out, size_t cap) {
     size_t pos = 0;
@@ -1415,6 +1457,7 @@ static bool renderAppPoll(const JsonDoc *doc, JsonRef args,
     return true;
 }
 
+/** Renders the blessed search-provider catalog, optionally filtered by query. */
 static bool renderSearchList(const JsonDoc *doc, JsonRef args,
                              char *out, size_t cap) {
     size_t pos = 0;
@@ -1446,6 +1489,7 @@ static bool renderSearchList(const JsonDoc *doc, JsonRef args,
     return true;
 }
 
+/** Queries a configured documented search API and renders bounded result rows. */
 static bool renderWebSearch(const JsonDoc *doc, JsonRef args,
                             char *out, size_t cap) {
     size_t pos = 0;
@@ -1626,6 +1670,7 @@ static bool renderWebSearch(const JsonDoc *doc, JsonRef args,
 
 // --- asset renderers (Rule 34 catalog surface; lookup precedent: renderDbLookup) ---
 
+/** Renders asset-source details or a filtered catalog listing. */
 static bool renderAssetLookup(const JsonDoc *doc, JsonRef args,
                               char *out, size_t cap) {
     size_t pos = 0;
@@ -1686,6 +1731,7 @@ static bool renderAssetLookup(const JsonDoc *doc, JsonRef args,
     return true;
 }
 
+/** Renders a cache-confined download plan without fetching or executing anything. */
 static bool renderAssetDownload(const JsonDoc *doc, JsonRef args,
                                 char *out, size_t cap) {
     size_t pos = 0;
@@ -1746,6 +1792,7 @@ static bool renderAssetDownload(const JsonDoc *doc, JsonRef args,
 
 // --- resource read ----------------------------------------------------------
 
+/** Looks up a hosted resource by exact URI. */
 static const McpResourceSlot *findResource(const char *uri) {
     if (!uri)
         return nullptr;
@@ -1758,6 +1805,7 @@ static const McpResourceSlot *findResource(const char *uri) {
 
 // --- _main dispatch ----------------------------------------------------------
 
+/** Parses one JSON-RPC input line and writes a response when it is a request. */
 bool McpServer_handleLine(McpServer *self, const char *line, size_t lineLen,
                           char *outBuf, size_t outCap) {
     if (!self || !line || !outBuf || outCap < 2)
@@ -1885,6 +1933,7 @@ bool McpServer_handleLine(McpServer *self, const char *line, size_t lineLen,
 
 // CONSTRUCTORS
 
+/** Returns the shared server instance with its static identity initialized. */
 McpServer *McpServer_shared(void) {
     static McpServer sServerShared; // zero-init singleton
     sServerShared.name = "vexgraph-mcp";
@@ -1894,18 +1943,22 @@ McpServer *McpServer_shared(void) {
 
 // GETTERS
 
+/** Returns the configured server name, or nullptr for a null receiver. */
 const char *McpServer_getName(const McpServer *self) {
     return self ? (*self).name : nullptr;
 }
 
+/** Returns the configured server version, or nullptr for a null receiver. */
 const char *McpServer_getVersion(const McpServer *self) {
     return self ? (*self).version : nullptr;
 }
 
+/** Returns the negotiated protocol version, or nullptr before initialization. */
 const char *McpServer_getProtocolVersion(const McpServer *self) {
     return self ? (*self).protocolVersion : nullptr;
 }
 
+/** Reports whether the server has completed its initialize handshake. */
 bool McpServer_isInitialized(const McpServer *self) {
     return self && (*self).initialized != 0;
 }
