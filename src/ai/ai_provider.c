@@ -96,12 +96,14 @@ static AiProvider sAiProviderShared; // zero-init singleton
 
 // CONSTRUCTORS
 
+/** Returns the process-wide immutable AI-provider directory handle. */
 AiProvider *AiProvider_shared(void) {
     return &sAiProviderShared;
 }
 
 // CORE FUNCTIONS
 
+/** Returns the number of directory rows, or zero for a null receiver. */
 uint32_t AiProvider_count(const AiProvider *self) {
     if (!self)
         return 0;
@@ -111,6 +113,7 @@ uint32_t AiProvider_count(const AiProvider *self) {
     return total;
 }
 
+/** Returns the flattened directory row at index i, or nullptr out of range. */
 const AiProviderSlot *AiProvider_at(const AiProvider *self, uint32_t i) {
     if (!self)
         return nullptr;
@@ -122,6 +125,7 @@ const AiProviderSlot *AiProvider_at(const AiProvider *self, uint32_t i) {
     return nullptr;
 }
 
+/** Finds a provider by exact slug, returning nullptr when absent or invalid. */
 const AiProviderSlot *AiProvider_get(const AiProvider *self, const char *slug) {
     if (!self || !slug || (*slug) == '\0')
         return nullptr;
@@ -134,6 +138,7 @@ const AiProviderSlot *AiProvider_get(const AiProvider *self, const char *slug) {
     return nullptr;
 }
 
+/** Returns a row's configured endpoint or the fallback for its provider family. */
 const char *AiProvider_resolveBaseUrl(const AiProvider *self,
                                       const AiProviderSlot *slot) {
     if (!self || !slot)
@@ -155,67 +160,79 @@ const char *AiProvider_resolveBaseUrl(const AiProvider *self,
 
 // GETTERS
 
+/** Returns the slot's canonical slug, or nullptr when no slot is supplied. */
 const char *AiProvider_getSlug(const AiProvider *self, const AiProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).slug : nullptr;
 }
 
+/** Returns the slot's display label, or nullptr when no slot is supplied. */
 const char *AiProvider_getDisplayName(const AiProvider *self, const AiProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).displayName : nullptr;
 }
 
+/** Returns the slot's explicitly configured endpoint, if any. */
 const char *AiProvider_getBaseUrl(const AiProvider *self, const AiProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).baseUrl : nullptr;
 }
 
+/** Returns the slot's wire-contract family, or the documented safe default. */
 AiProviderFamily AiProvider_getFamily(const AiProvider *self, const AiProviderSlot *slot) {
     if (!self || !slot)
         return AI_PROVIDER_FAMILY_OPENAI_COMPAT; // safe default
     return (*slot).family;
 }
 
+/** Returns the slot's credential scheme, or the documented safe default. */
 AiProviderAuth AiProvider_getAuth(const AiProvider *self, const AiProviderSlot *slot) {
     if (!self || !slot)
         return AI_PROVIDER_AUTH_BEARER; // safe default
     return (*slot).auth;
 }
 
+/** Returns the slot's region classification, or the documented safe default. */
 AiProviderRegion AiProvider_getRegion(const AiProvider *self, const AiProviderSlot *slot) {
     if (!self || !slot)
         return AI_PROVIDER_REGION_GLOBAL; // safe default
     return (*slot).region;
 }
 
+/** Returns the slot's optional note, or nullptr when absent. */
 const char *AiProvider_getNote(const AiProvider *self, const AiProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).note : nullptr;
 }
 
+/** Returns the slot's daily quota value, or zero when unavailable. */
 uint32_t AiProvider_getQuotaPerDay(const AiProvider *self, const AiProviderSlot *slot) {
     if (!self || !slot)
         return 0;
     return (*slot).quotaPerDay;
 }
 
+/** Returns the slot's remaining quota value, or zero when unavailable. */
 uint32_t AiProvider_getQuotaRemaining(const AiProvider *self, const AiProviderSlot *slot) {
     if (!self || !slot)
         return 0;
     return (*slot).quotaRemaining;
 }
 
+/** Returns the slot's quota-reset Unix time, or zero when unavailable. */
 int64_t AiProvider_getResetUnix(const AiProvider *self, const AiProviderSlot *slot) {
     if (!self || !slot)
         return 0;
     return (*slot).resetUnix;
 }
 
+/** Returns the slot's optional human-readable credential-kind label. */
 const char *AiProvider_getAuthKind(const AiProvider *self, const AiProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).authKind : nullptr;
 }
 
+/** Returns the slot's optional license-family label. */
 const char *AiProvider_getLicenseFamily(const AiProvider *self, const AiProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).licenseFamily : nullptr;
