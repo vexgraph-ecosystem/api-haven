@@ -33,6 +33,7 @@
  * ============================================================================
  */
 
+/** Splits a webhook URL into bounded scheme, host, port, and path outputs. */
 static bool parseUrl(const char *url, char *scheme, size_t schemeCap,
                      char *host, size_t hostCap, int *port,
                      char *path, size_t pathCap) {
@@ -85,6 +86,7 @@ static bool parseUrl(const char *url, char *scheme, size_t schemeCap,
     return true;
 }
 
+/** Appends an optional JSON string field while tracking field separators. */
 static bool appendStringField(char *buf, size_t cap, size_t *offset, const char *key, const char *val, bool *first) {
     if (!val) return true;
     size_t o = *offset;
@@ -103,6 +105,7 @@ static bool appendStringField(char *buf, size_t cap, size_t *offset, const char 
     return true;
 }
 
+/** Sends a Discord text webhook payload and reports whether the response is 2xx. */
 bool DiscordWebhook_sendText(const char *webhookUrl, const char *content,
                              const char *username, const char *avatarUrl) {
     if (!webhookUrl || webhookUrl[0] == '\0') return false;
@@ -164,6 +167,7 @@ bool DiscordWebhook_sendText(const char *webhookUrl, const char *content,
     return resp.ok && resp.status >= 200 && resp.status < 300;
 }
 
+/** Sends a Discord webhook payload with optional embed fields. */
 bool DiscordWebhook_sendEmbed(const char *webhookUrl, const char *content,
                               const char *username, const char *avatarUrl,
                               const DiscordEmbed *embed) {
