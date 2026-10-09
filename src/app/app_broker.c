@@ -76,6 +76,7 @@
 
 // CONSTRUCTORS
 
+/** Creates a broker with no bound driver and the default timeout. */
 AppBroker AppBroker_0() {
     AppBroker self = { 0 };
     self.timeoutMs = APP_DEFAULT_TIMEOUT_MS;
@@ -83,6 +84,7 @@ AppBroker AppBroker_0() {
     return self;
 }
 
+/** Creates a broker with no bound driver and the supplied default timeout. */
 AppBroker AppBroker_1(uint64_t timeoutMs) {
     AppBroker self = { 0 };
     self.timeoutMs = timeoutMs;
@@ -92,6 +94,8 @@ AppBroker AppBroker_1(uint64_t timeoutMs) {
 
 // CORE FUNCTIONS
 
+/** Runs one action through the injected driver and records its bounded result. */
+/** Runs one action through the injected driver and records its bounded result. */
 bool AppBroker_action(AppBroker *self, const char *action,
                       const char *paramsJson, size_t paramsLen,
                       char *outBuf, size_t outCap, uint32_t *outJobId) {
@@ -147,6 +151,7 @@ bool AppBroker_action(AppBroker *self, const char *action,
     return true;
 }
 
+/** Returns the stored status for a job without waiting for driver work. */
 AppStatus AppBroker_poll(AppBroker *self, uint32_t jobId) {
     if (!self || jobId == 0)
         return APP_STATUS_IDLE;
@@ -158,6 +163,7 @@ AppStatus AppBroker_poll(AppBroker *self, uint32_t jobId) {
     return APP_STATUS_IDLE;
 }
 
+/** Cancels a running job slot and returns it to the idle state. */
 bool AppBroker_cancel(AppBroker *self, uint32_t jobId) {
     if (!self || jobId == 0)
         return false;
@@ -176,12 +182,14 @@ bool AppBroker_cancel(AppBroker *self, uint32_t jobId) {
 
 // SETTERS
 
+/** Sets the borrowed automation target row used for subsequent actions. */
 void AppBroker_setTarget(AppBroker *self, const AppProviderSlot *target) {
     if (!self)
         return;
     (*self).target = target;
 }
 
+/** Binds the opaque driver context and its action callback table. */
 void AppBroker_setDriver(AppBroker *self, void *driver, AppDriverTable table) {
     if (!self)
         return;
@@ -189,6 +197,7 @@ void AppBroker_setDriver(AppBroker *self, void *driver, AppDriverTable table) {
     (*self).table = table;
 }
 
+/** Sets the default per-action timeout in milliseconds. */
 void AppBroker_setTimeout(AppBroker *self, uint64_t timeoutMs) {
     if (!self)
         return;
@@ -197,20 +206,24 @@ void AppBroker_setTimeout(AppBroker *self, uint64_t timeoutMs) {
 
 // GETTERS
 
+/** Returns the borrowed target row, or nullptr when unset. */
 const AppProviderSlot *AppBroker_getTarget(const AppBroker *self) {
     return self ? (*self).target : nullptr;
 }
 
+/** Returns the opaque driver context, or nullptr for a null receiver. */
 void *AppBroker_getDriver(const AppBroker *self) {
     return self ? (*self).driver : nullptr;
 }
 
+/** Returns the configured timeout, or zero for a null receiver. */
 uint64_t AppBroker_getTimeout(const AppBroker *self) {
     if (!self)
         return 0;
     return (*self).timeoutMs;
 }
 
+/** Reports whether any recorded job currently has running status. */
 bool AppBroker_isRunning(const AppBroker *self) {
     if (!self)
         return false;
@@ -222,12 +235,14 @@ bool AppBroker_isRunning(const AppBroker *self) {
     return false;
 }
 
+/** Returns the number of job slots issued so far. */
 uint32_t AppBroker_getJobCount(const AppBroker *self) {
     if (!self)
         return 0;
     return (*self).jobCount;
 }
 
+/** Returns the job record at index i, or nullptr when out of range. */
 const AppJob *AppBroker_getJobAt(const AppBroker *self, uint32_t i) {
     if (!self)
         return nullptr;
@@ -236,6 +251,7 @@ const AppJob *AppBroker_getJobAt(const AppBroker *self, uint32_t i) {
     return &(*self).jobs[i];
 }
 
+/** Returns the status associated with jobId, or idle when it is unknown. */
 AppStatus AppBroker_getJobStatus(const AppBroker *self, uint32_t jobId) {
     if (!self || jobId == 0)
         return APP_STATUS_IDLE;
@@ -247,6 +263,7 @@ AppStatus AppBroker_getJobStatus(const AppBroker *self, uint32_t jobId) {
     return APP_STATUS_IDLE;
 }
 
+/** Returns the last action result, or idle for a null receiver. */
 AppStatus AppBroker_getLastStatus(const AppBroker *self) {
     if (!self)
         return APP_STATUS_IDLE;

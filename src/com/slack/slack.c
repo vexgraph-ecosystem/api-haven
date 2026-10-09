@@ -26,6 +26,7 @@
  * ============================================================================
  */
 
+/** Appends one optional JSON string field, updating the comma state and offset. */
 static bool appendField(char *buf, size_t cap, size_t *offset,
                         const char *key, const char *val, bool *first) {
     if (!val)
@@ -50,6 +51,7 @@ static bool appendField(char *buf, size_t cap, size_t *offset,
 }
 
 // CORE FUNCTIONS
+/** Sends a Slack incoming-webhook text payload and reports a 2xx response. */
 bool SlackWebhook_sendText(const char *webhookUrl, const char *text,
                            const char *username, const char *iconUrl) {
     if (!webhookUrl || webhookUrl[0] == '\0')
