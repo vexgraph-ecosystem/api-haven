@@ -134,18 +134,21 @@ static EngineProvider sEngineProviderShared; // zero-init singleton
 
 // CONSTRUCTORS
 
+/** Returns the process-wide immutable engine directory handle. */
 EngineProvider *EngineProvider_shared(void) {
     return &sEngineProviderShared;
 }
 
 // CORE FUNCTIONS
 
+/** Returns the directory row count, or zero for a null receiver. */
 uint32_t EngineProvider_count(const EngineProvider *self) {
     if (!self)
         return 0;
     return kEngineProviderCount;
 }
 
+/** Returns the row at index i, or nullptr for a null receiver or invalid index. */
 const EngineProviderSlot *EngineProvider_at(const EngineProvider *self, uint32_t i) {
     if (!self)
         return nullptr;
@@ -154,6 +157,7 @@ const EngineProviderSlot *EngineProvider_at(const EngineProvider *self, uint32_t
     return &kEngineProviders[i];
 }
 
+/** Finds an engine by exact slug, returning nullptr when absent or invalid. */
 const EngineProviderSlot *EngineProvider_get(const EngineProvider *self, const char *slug) {
     if (!self || !slug || (*slug) == '\0')
         return nullptr;
@@ -165,6 +169,7 @@ const EngineProviderSlot *EngineProvider_get(const EngineProvider *self, const c
     return nullptr;
 }
 
+/** Copies the row's CLI executable name into the bounded destination. */
 bool EngineProvider_resolveCli(const EngineProvider *self,
                                const EngineProviderSlot *slot,
                                char *outBuf, size_t outCap) {
@@ -182,24 +187,28 @@ bool EngineProvider_resolveCli(const EngineProvider *self,
 
 // GETTERS
 
+/** Returns the slot's canonical slug, or nullptr when no slot is supplied. */
 const char *EngineProvider_getSlug(const EngineProvider *self,
                                    const EngineProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).slug : nullptr;
 }
 
+/** Returns the slot's display label, or nullptr when no slot is supplied. */
 const char *EngineProvider_getDisplayName(const EngineProvider *self,
                                           const EngineProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).displayName : nullptr;
 }
 
+/** Returns the slot's CLI executable name, or nullptr when absent. */
 const char *EngineProvider_getCliName(const EngineProvider *self,
                                       const EngineProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).cliName : nullptr;
 }
 
+/** Returns the slot's transport family, or the documented safe default. */
 EngineProviderFamily EngineProvider_getFamily(const EngineProvider *self,
                                               const EngineProviderSlot *slot) {
     if (!self || !slot)
@@ -207,6 +216,7 @@ EngineProviderFamily EngineProvider_getFamily(const EngineProvider *self,
     return (*slot).family;
 }
 
+/** Returns the slot's credential scheme, or the documented safe default. */
 EngineProviderAuth EngineProvider_getAuth(const EngineProvider *self,
                                           const EngineProviderSlot *slot) {
     if (!self || !slot)
@@ -214,6 +224,7 @@ EngineProviderAuth EngineProvider_getAuth(const EngineProvider *self,
     return (*slot).auth;
 }
 
+/** Returns the slot's optional provider note. */
 const char *EngineProvider_getNote(const EngineProvider *self,
                                    const EngineProviderSlot *slot) {
     (void)self;
