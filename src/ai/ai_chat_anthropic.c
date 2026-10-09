@@ -58,6 +58,7 @@
 
 // --- static helpers ---------------------------------------------------------
 
+/** Appends a literal and terminator when the remaining output capacity permits. */
 static bool appendLiteral(char *out, size_t cap, size_t *used, const char *s) {
     const size_t n = strlen(s);
     if (!out || !used || *used + n + 1 > cap)
@@ -68,6 +69,7 @@ static bool appendLiteral(char *out, size_t cap, size_t *used, const char *s) {
     return true;
 }
 
+/** Appends one JSON-escaped string to the current bounded output position. */
 static bool appendJsonString(char *out, size_t cap, size_t *used, const char *s) {
     const int64_t w = Json_writeString(out + *used, cap - *used, s);
     if (w < 0)
@@ -78,6 +80,7 @@ static bool appendJsonString(char *out, size_t cap, size_t *used, const char *s)
 
 // CONSTRUCTORS
 
+/** Returns a cleared Anthropic chat value with the default token limit. */
 AiChatAnthropic AiChatAnthropic_0(void) {
     AiChatAnthropic chat;
     memset(&chat, 0, sizeof(chat));
@@ -85,6 +88,7 @@ AiChatAnthropic AiChatAnthropic_0(void) {
     return chat;
 }
 
+/** Initializes an Anthropic chat value with a model and shared provider directory. */
 AiChatAnthropic AiChatAnthropic_1(const char *model) {
     AiChatAnthropic chat = AiChatAnthropic_0();
     // provider borrows the shared singleton so directory calls are legal.
@@ -93,6 +97,7 @@ AiChatAnthropic AiChatAnthropic_1(const char *model) {
     return chat;
 }
 
+/** Initializes an Anthropic chat value with a model and borrowed API key. */
 AiChatAnthropic AiChatAnthropic_2(const char *model, const char *apiKey) {
     AiChatAnthropic chat = AiChatAnthropic_1(model);
     chat.apiKey = apiKey;
@@ -101,6 +106,7 @@ AiChatAnthropic AiChatAnthropic_2(const char *model, const char *apiKey) {
 
 // CORE FUNCTIONS
 
+/** Renders the Anthropic Messages URL, body, and x-api-key auth descriptor. */
 bool AiChatAnthropic_buildRequest(const AiChatAnthropic *self, const AiMessage *msgs,
                                   uint32_t msgCount, char *bodyBuf, size_t bodyCap,
                                   char *urlBuf, size_t urlCap, ApiAuth *authOut) {
@@ -167,6 +173,7 @@ bool AiChatAnthropic_buildRequest(const AiChatAnthropic *self, const AiMessage *
     return true;
 }
 
+/** Builds and sends an Anthropic Messages request through the REST core. */
 bool AiChatAnthropic_complete(const AiChatAnthropic *self, const AiMessage *msgs,
                                uint32_t msgCount, char *bodyBuf, size_t bodyCap,
                                HttpResponse *resp) {
@@ -182,31 +189,37 @@ bool AiChatAnthropic_complete(const AiChatAnthropic *self, const AiMessage *msgs
 
 // SETTERS
 
+/** Sets the borrowed provider directory used to resolve the selected peer. */
 void AiChatAnthropic_setProvider(AiChatAnthropic *self, const AiProvider *provider) {
     if (self)
         (*self).provider = provider;
 }
 
+/** Selects the borrowed provider row for endpoint resolution. */
 void AiChatAnthropic_setPeer(AiChatAnthropic *self, const AiProviderSlot *peer) {
     if (self)
         (*self).peer = peer;
 }
 
+/** Sets the borrowed model identifier used in the request envelope. */
 void AiChatAnthropic_setModel(AiChatAnthropic *self, const char *model) {
     if (self)
         (*self).model = model;
 }
 
+/** Sets the borrowed x-api-key credential, or nullptr to omit authentication. */
 void AiChatAnthropic_setApiKey(AiChatAnthropic *self, const char *apiKey) {
     if (self)
         (*self).apiKey = apiKey;
 }
 
+/** Sets an optional borrowed endpoint override. */
 void AiChatAnthropic_setBaseUrl(AiChatAnthropic *self, const char *baseUrlOverride) {
     if (self)
         (*self).baseUrlOverride = baseUrlOverride;
 }
 
+/** Sets the request's maximum token count. */
 void AiChatAnthropic_setMaxTokens(AiChatAnthropic *self, uint32_t maxTokens) {
     if (self)
         (*self).maxTokens = maxTokens;
@@ -214,26 +227,32 @@ void AiChatAnthropic_setMaxTokens(AiChatAnthropic *self, uint32_t maxTokens) {
 
 // GETTERS
 
+/** Returns the configured provider directory, or nullptr for a null receiver. */
 const AiProvider *AiChatAnthropic_getProvider(const AiChatAnthropic *self) {
     return self ? (*self).provider : nullptr;
 }
 
+/** Returns the selected provider row, or nullptr when unset or self is null. */
 const AiProviderSlot *AiChatAnthropic_getPeer(const AiChatAnthropic *self) {
     return self ? (*self).peer : nullptr;
 }
 
+/** Returns the borrowed model identifier, or nullptr when unset. */
 const char *AiChatAnthropic_getModel(const AiChatAnthropic *self) {
     return self ? (*self).model : nullptr;
 }
 
+/** Returns the borrowed API key, or nullptr when unset. */
 const char *AiChatAnthropic_getApiKey(const AiChatAnthropic *self) {
     return self ? (*self).apiKey : nullptr;
 }
 
+/** Returns the endpoint override, or nullptr when unset. */
 const char *AiChatAnthropic_getBaseUrl(const AiChatAnthropic *self) {
     return self ? (*self).baseUrlOverride : nullptr;
 }
 
+/** Returns the configured token ceiling, or zero for a null receiver. */
 uint32_t AiChatAnthropic_getMaxTokens(const AiChatAnthropic *self) {
     if (!self)
         return 0;

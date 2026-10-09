@@ -55,6 +55,7 @@
 
 // --- static helpers ---------------------------------------------------------
 
+/** Appends a literal and terminator when the remaining output capacity permits. */
 static bool appendLiteral(char *out, size_t cap, size_t *used, const char *s) {
     const size_t n = strlen(s);
     if (!out || !used || *used + n + 1 > cap)
@@ -65,6 +66,7 @@ static bool appendLiteral(char *out, size_t cap, size_t *used, const char *s) {
     return true;
 }
 
+/** Appends one JSON-escaped string to the current bounded output position. */
 static bool appendJsonString(char *out, size_t cap, size_t *used, const char *s) {
     const int64_t w = Json_writeString(out + *used, cap - *used, s);
     if (w < 0)
@@ -75,12 +77,14 @@ static bool appendJsonString(char *out, size_t cap, size_t *used, const char *s)
 
 // CONSTRUCTORS
 
+/** Returns an AiChat value with all fields cleared. */
 AiChat AiChat_0(void) {
     AiChat chat;
     memset(&chat, 0, sizeof(chat));
     return chat;
 }
 
+/** Initializes a chat value with a model and the shared provider directory. */
 AiChat AiChat_1(const char *model) {
     AiChat chat = AiChat_0();
     // provider borrows the shared singleton so directory calls are legal.
@@ -89,6 +93,7 @@ AiChat AiChat_1(const char *model) {
     return chat;
 }
 
+/** Initializes a chat value with a model and borrowed API key. */
 AiChat AiChat_2(const char *model, const char *apiKey) {
     AiChat chat = AiChat_1(model);
     chat.apiKey = apiKey;
@@ -97,6 +102,7 @@ AiChat AiChat_2(const char *model, const char *apiKey) {
 
 // CORE FUNCTIONS
 
+/** Renders the OpenAI-compatible request URL, JSON body, and auth descriptor. */
 bool AiChat_buildRequest(const AiChat *self, const AiMessage *msgs, uint32_t msgCount,
                          char *bodyBuf, size_t bodyCap,
                          char *urlBuf, size_t urlCap,
@@ -157,6 +163,7 @@ bool AiChat_buildRequest(const AiChat *self, const AiMessage *msgs, uint32_t msg
     return true;
 }
 
+/** Builds and sends a chat-completion request, returning the REST result. */
 bool AiChat_complete(const AiChat *self, const AiMessage *msgs, uint32_t msgCount,
                      char *bodyBuf, size_t bodyCap,
                      HttpResponse *resp) {
@@ -172,26 +179,31 @@ bool AiChat_complete(const AiChat *self, const AiMessage *msgs, uint32_t msgCoun
 
 // SETTERS
 
+/** Sets the borrowed provider directory used to resolve the selected peer. */
 void AiChat_setProvider(AiChat *self, const AiProvider *provider) {
     if (self)
         (*self).provider = provider;
 }
 
+/** Selects the borrowed provider row for endpoint resolution. */
 void AiChat_setPeer(AiChat *self, const AiProviderSlot *peer) {
     if (self)
         (*self).peer = peer;
 }
 
+/** Sets the borrowed model identifier used in the request envelope. */
 void AiChat_setModel(AiChat *self, const char *model) {
     if (self)
         (*self).model = model;
 }
 
+/** Sets the borrowed bearer credential, or nullptr to omit authentication. */
 void AiChat_setApiKey(AiChat *self, const char *apiKey) {
     if (self)
         (*self).apiKey = apiKey;
 }
 
+/** Sets an optional borrowed endpoint override. */
 void AiChat_setBaseUrl(AiChat *self, const char *baseUrlOverride) {
     if (self)
         (*self).baseUrlOverride = baseUrlOverride;
@@ -199,22 +211,27 @@ void AiChat_setBaseUrl(AiChat *self, const char *baseUrlOverride) {
 
 // GETTERS
 
+/** Returns the configured provider directory, or nullptr for a null receiver. */
 const AiProvider *AiChat_getProvider(const AiChat *self) {
     return self ? (*self).provider : nullptr;
 }
 
+/** Returns the selected provider row, or nullptr when unset or self is null. */
 const AiProviderSlot *AiChat_getPeer(const AiChat *self) {
     return self ? (*self).peer : nullptr;
 }
 
+/** Returns the borrowed model identifier, or nullptr when unset. */
 const char *AiChat_getModel(const AiChat *self) {
     return self ? (*self).model : nullptr;
 }
 
+/** Returns the borrowed API key, or nullptr when unset. */
 const char *AiChat_getApiKey(const AiChat *self) {
     return self ? (*self).apiKey : nullptr;
 }
 
+/** Returns the endpoint override, or nullptr when unset. */
 const char *AiChat_getBaseUrl(const AiChat *self) {
     return self ? (*self).baseUrlOverride : nullptr;
 }

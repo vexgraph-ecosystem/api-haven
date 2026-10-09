@@ -60,6 +60,7 @@
 
 // --- static helpers ---------------------------------------------------------
 
+/** Appends a literal and terminator when the remaining output capacity permits. */
 static bool appendLiteral(char *out, size_t cap, size_t *used, const char *s) {
     const size_t n = strlen(s);
     if (!out || !used || *used + n + 1 > cap)
@@ -70,6 +71,7 @@ static bool appendLiteral(char *out, size_t cap, size_t *used, const char *s) {
     return true;
 }
 
+/** Appends one JSON-escaped string to the current bounded output position. */
 static bool appendJsonString(char *out, size_t cap, size_t *used, const char *s) {
     const int64_t w = Json_writeString(out + *used, cap - *used, s);
     if (w < 0)
@@ -79,6 +81,7 @@ static bool appendJsonString(char *out, size_t cap, size_t *used, const char *s)
 }
 
 // Gemini content role: assistant becomes model, system folds to user.
+/** Maps chat roles to Gemini's user/model vocabulary. */
 static const char *mapRole(const char *role) {
     if (!role)
         return "user";
@@ -91,12 +94,14 @@ static const char *mapRole(const char *role) {
 
 // CONSTRUCTORS
 
+/** Returns an AiChatGemini value with all fields cleared. */
 AiChatGemini AiChatGemini_0(void) {
     AiChatGemini chat;
     memset(&chat, 0, sizeof(chat));
     return chat;
 }
 
+/** Initializes a Gemini chat value with a model and shared provider directory. */
 AiChatGemini AiChatGemini_1(const char *model) {
     AiChatGemini chat = AiChatGemini_0();
     // provider borrows the shared singleton so directory calls are legal.
@@ -105,6 +110,7 @@ AiChatGemini AiChatGemini_1(const char *model) {
     return chat;
 }
 
+/** Initializes a Gemini chat value with a model and borrowed API key. */
 AiChatGemini AiChatGemini_2(const char *model, const char *apiKey) {
     AiChatGemini chat = AiChatGemini_1(model);
     chat.apiKey = apiKey;
@@ -113,6 +119,7 @@ AiChatGemini AiChatGemini_2(const char *model, const char *apiKey) {
 
 // CORE FUNCTIONS
 
+/** Renders the Gemini generateContent URL, JSON body, and API-key auth descriptor. */
 bool AiChatGemini_buildRequest(const AiChatGemini *self, const AiMessage *msgs,
                                uint32_t msgCount, char *bodyBuf, size_t bodyCap,
                                char *urlBuf, size_t urlCap, ApiAuth *authOut) {
@@ -169,6 +176,7 @@ bool AiChatGemini_buildRequest(const AiChatGemini *self, const AiMessage *msgs,
     return true;
 }
 
+/** Builds and sends a Gemini generateContent request through the REST core. */
 bool AiChatGemini_complete(const AiChatGemini *self, const AiMessage *msgs,
                             uint32_t msgCount, char *bodyBuf, size_t bodyCap,
                             HttpResponse *resp) {
@@ -184,26 +192,31 @@ bool AiChatGemini_complete(const AiChatGemini *self, const AiMessage *msgs,
 
 // SETTERS
 
+/** Sets the borrowed provider directory used to resolve the selected peer. */
 void AiChatGemini_setProvider(AiChatGemini *self, const AiProvider *provider) {
     if (self)
         (*self).provider = provider;
 }
 
+/** Selects the borrowed provider row for endpoint resolution. */
 void AiChatGemini_setPeer(AiChatGemini *self, const AiProviderSlot *peer) {
     if (self)
         (*self).peer = peer;
 }
 
+/** Sets the borrowed model identifier used in the request URL. */
 void AiChatGemini_setModel(AiChatGemini *self, const char *model) {
     if (self)
         (*self).model = model;
 }
 
+/** Sets the borrowed x-goog-api-key credential, or nullptr to omit authentication. */
 void AiChatGemini_setApiKey(AiChatGemini *self, const char *apiKey) {
     if (self)
         (*self).apiKey = apiKey;
 }
 
+/** Sets an optional borrowed endpoint override. */
 void AiChatGemini_setBaseUrl(AiChatGemini *self, const char *baseUrlOverride) {
     if (self)
         (*self).baseUrlOverride = baseUrlOverride;
@@ -211,22 +224,27 @@ void AiChatGemini_setBaseUrl(AiChatGemini *self, const char *baseUrlOverride) {
 
 // GETTERS
 
+/** Returns the configured provider directory, or nullptr for a null receiver. */
 const AiProvider *AiChatGemini_getProvider(const AiChatGemini *self) {
     return self ? (*self).provider : nullptr;
 }
 
+/** Returns the selected provider row, or nullptr when unset or self is null. */
 const AiProviderSlot *AiChatGemini_getPeer(const AiChatGemini *self) {
     return self ? (*self).peer : nullptr;
 }
 
+/** Returns the borrowed model identifier, or nullptr when unset. */
 const char *AiChatGemini_getModel(const AiChatGemini *self) {
     return self ? (*self).model : nullptr;
 }
 
+/** Returns the borrowed API key, or nullptr when unset. */
 const char *AiChatGemini_getApiKey(const AiChatGemini *self) {
     return self ? (*self).apiKey : nullptr;
 }
 
+/** Returns the endpoint override, or nullptr when unset. */
 const char *AiChatGemini_getBaseUrl(const AiChatGemini *self) {
     return self ? (*self).baseUrlOverride : nullptr;
 }
