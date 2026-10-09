@@ -32,6 +32,7 @@
  */
 ;;INTENTION("canonical shim for the quarantined attic/APIClient.java: same sendTelemetry contract, vexspoke transports, null-safe degrade (false) — Rule 35 cold-strict")
 
+/** Splits a URL into bounded scheme, host, port, and path outputs. */
 static bool parseUrl(const char *url, char *scheme, size_t schemeCap,
                      char *host, size_t hostCap, int *port,
                      char *path, size_t pathCap) {
@@ -84,6 +85,7 @@ static bool parseUrl(const char *url, char *scheme, size_t schemeCap,
     return true;
 }
 
+/** Serializes telemetry into bounded JSON and reports HTTP success. */
 bool APIClient_sendTelemetry(const char *endpointUrl, const APIClientTelemetry *telemetry) {
     if (!endpointUrl || !telemetry) {
         return false;

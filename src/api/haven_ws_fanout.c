@@ -59,6 +59,7 @@
 
 // CONSTRUCTORS
 
+/** Allocates and initializes an empty fixed-capacity fan-out registry. */
 HavenWsFanout *HavenWsFanout_0(void) {
     HavenWsFanout *fanout = (HavenWsFanout*) calloc(1, sizeof(HavenWsFanout));
     if (!fanout)
@@ -69,12 +70,14 @@ HavenWsFanout *HavenWsFanout_0(void) {
 
 // CORE FUNCTIONS
 
+/** Releases the registry allocation; attached handles remain caller-owned. */
 void HavenWsFanout_free(HavenWsFanout *fanout) {
     if (!fanout)
         return;
     free(fanout);
 }
 
+/** Attaches a unique borrowed handle and source table into an available slot. */
 bool HavenWsFanout_attach(HavenWsFanout *fanout, void *handle,
                           const HavenWsSource *source) {
     if (!fanout || !handle || !source)
@@ -96,6 +99,7 @@ bool HavenWsFanout_attach(HavenWsFanout *fanout, void *handle,
     return false;
 }
 
+/** Detaches a previously attached handle and clears its registry slot. */
 bool HavenWsFanout_detach(HavenWsFanout *fanout, void *handle) {
     if (!fanout || !handle)
         return false;
@@ -111,6 +115,7 @@ bool HavenWsFanout_detach(HavenWsFanout *fanout, void *handle) {
     return false;
 }
 
+/** Polls each attached source once using a slice derived from the supplied budget. */
 uint32_t HavenWsFanout_pollStep(HavenWsFanout *fanout, uint64_t budgetMs) {
     if (!fanout)
         return 0;
@@ -136,12 +141,14 @@ uint32_t HavenWsFanout_pollStep(HavenWsFanout *fanout, uint64_t budgetMs) {
 
 // GETTERS
 
+/** Returns the number of currently attached handles. */
 uint32_t HavenWsFanout_getCount(const HavenWsFanout *fanout) {
     if (!fanout)
         return 0;
     return (*fanout).count;
 }
 
+/** Returns the handle at index i, or nullptr for an invalid slot. */
 void *HavenWsFanout_getHandle(const HavenWsFanout *fanout, uint32_t i) {
     if (!fanout)
         return nullptr;
