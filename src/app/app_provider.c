@@ -200,18 +200,21 @@ static AppProvider sAppProviderShared; // zero-init singleton
 
 // CONSTRUCTORS
 
+/** Returns the process-wide immutable app/automation directory handle. */
 AppProvider *AppProvider_shared(void) {
     return &sAppProviderShared;
 }
 
 // CORE FUNCTIONS
 
+/** Returns the directory row count, or zero for a null receiver. */
 uint32_t AppProvider_count(const AppProvider *self) {
     if (!self)
         return 0;
     return kAppProviderCount;
 }
 
+/** Returns the row at index i, or nullptr for a null receiver or invalid index. */
 const AppProviderSlot *AppProvider_at(const AppProvider *self, uint32_t i) {
     if (!self)
         return nullptr;
@@ -220,6 +223,7 @@ const AppProviderSlot *AppProvider_at(const AppProvider *self, uint32_t i) {
     return &kAppProviders[i];
 }
 
+/** Finds an automation target by exact slug, returning nullptr when absent. */
 const AppProviderSlot *AppProvider_get(const AppProvider *self, const char *slug) {
     if (!self || !slug || (*slug) == '\0')
         return nullptr;
@@ -231,6 +235,7 @@ const AppProviderSlot *AppProvider_get(const AppProvider *self, const char *slug
     return nullptr;
 }
 
+/** Copies the row's bundle, CLI, or URL target into the bounded destination. */
 bool AppProvider_resolveTarget(const AppProvider *self,
                                const AppProviderSlot *slot,
                                char *outBuf, size_t outCap) {
@@ -248,18 +253,21 @@ bool AppProvider_resolveTarget(const AppProvider *self,
 
 // GETTERS
 
+/** Returns the slot's canonical slug, or nullptr when no slot is supplied. */
 const char *AppProvider_getSlug(const AppProvider *self,
                                 const AppProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).slug : nullptr;
 }
 
+/** Returns the slot's display label, or nullptr when no slot is supplied. */
 const char *AppProvider_getDisplayName(const AppProvider *self,
                                        const AppProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).displayName : nullptr;
 }
 
+/** Returns the slot's transport family, or the documented safe default. */
 AppProviderFamily AppProvider_getFamily(const AppProvider *self,
                                         const AppProviderSlot *slot) {
     if (!self || !slot)
@@ -267,6 +275,7 @@ AppProviderFamily AppProvider_getFamily(const AppProvider *self,
     return (*slot).family;
 }
 
+/** Returns the slot's authentication scheme, or the documented safe default. */
 AppProviderAuth AppProvider_getAuth(const AppProvider *self,
                                     const AppProviderSlot *slot) {
     if (!self || !slot)
@@ -274,12 +283,14 @@ AppProviderAuth AppProvider_getAuth(const AppProvider *self,
     return (*slot).auth;
 }
 
+/** Returns the slot's bundle identifier, CLI name, or URL target string. */
 const char *AppProvider_getBundleIdOrScheme(const AppProvider *self,
                                             const AppProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).bundleIdOrScheme : nullptr;
 }
 
+/** Returns the slot's optional provider caveat. */
 const char *AppProvider_getNote(const AppProvider *self,
                                 const AppProviderSlot *slot) {
     (void)self;
