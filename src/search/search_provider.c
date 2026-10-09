@@ -107,18 +107,21 @@ static SearchProvider sSearchProviderShared; // zero-init singleton
 
 // CONSTRUCTORS
 
+/** Returns the process-wide immutable web-search directory handle. */
 SearchProvider *SearchProvider_shared(void) {
     return &sSearchProviderShared;
 }
 
 // CORE FUNCTIONS
 
+/** Returns the directory row count, or zero for a null receiver. */
 uint32_t SearchProvider_count(const SearchProvider *self) {
     if (!self)
         return 0;
     return kSearchProviderCount;
 }
 
+/** Returns the row at index i, or nullptr for a null receiver or invalid index. */
 const SearchProviderSlot *SearchProvider_at(const SearchProvider *self, uint32_t i) {
     if (!self)
         return nullptr;
@@ -127,6 +130,7 @@ const SearchProviderSlot *SearchProvider_at(const SearchProvider *self, uint32_t
     return &kSearchProviders[i];
 }
 
+/** Finds a search provider by exact slug, returning nullptr when absent. */
 const SearchProviderSlot *SearchProvider_get(const SearchProvider *self, const char *slug) {
     if (!self || !slug || (*slug) == '\0')
         return nullptr;
@@ -138,6 +142,7 @@ const SearchProviderSlot *SearchProvider_get(const SearchProvider *self, const c
     return nullptr;
 }
 
+/** Copies the provider endpoint into outBuf when it fits including its terminator. */
 bool SearchProvider_resolveEndpoint(const SearchProvider *self,
                                     const SearchProviderSlot *slot,
                                     char *outBuf, size_t outCap) {
@@ -155,18 +160,21 @@ bool SearchProvider_resolveEndpoint(const SearchProvider *self,
 
 // GETTERS
 
+/** Returns the slot's canonical slug, or nullptr when no slot is supplied. */
 const char *SearchProvider_getSlug(const SearchProvider *self,
                                    const SearchProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).slug : nullptr;
 }
 
+/** Returns the slot's display label, or nullptr when no slot is supplied. */
 const char *SearchProvider_getDisplayName(const SearchProvider *self,
                                           const SearchProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).displayName : nullptr;
 }
 
+/** Returns the slot's wire family, or the documented safe default. */
 SearchProviderFamily SearchProvider_getFamily(const SearchProvider *self,
                                               const SearchProviderSlot *slot) {
     if (!self || !slot)
@@ -174,6 +182,7 @@ SearchProviderFamily SearchProvider_getFamily(const SearchProvider *self,
     return (*slot).family;
 }
 
+/** Returns the slot's authentication scheme, or the documented safe default. */
 SearchProviderAuth SearchProvider_getAuth(const SearchProvider *self,
                                           const SearchProviderSlot *slot) {
     if (!self || !slot)
@@ -181,18 +190,21 @@ SearchProviderAuth SearchProvider_getAuth(const SearchProvider *self,
     return (*slot).auth;
 }
 
+/** Returns the slot's configured search endpoint, if any. */
 const char *SearchProvider_getEndpoint(const SearchProvider *self,
                                        const SearchProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).endpoint : nullptr;
 }
 
+/** Returns the slot's optional provider note. */
 const char *SearchProvider_getNote(const SearchProvider *self,
                                    const SearchProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).note : nullptr;
 }
 
+/** Returns the slot's daily quota value, or zero when unavailable. */
 uint32_t SearchProvider_getQuotaPerDay(const SearchProvider *self,
                                        const SearchProviderSlot *slot) {
     if (!self || !slot)
@@ -200,6 +212,7 @@ uint32_t SearchProvider_getQuotaPerDay(const SearchProvider *self,
     return (*slot).quotaPerDay;
 }
 
+/** Returns the slot's remaining quota value, or zero when unavailable. */
 uint32_t SearchProvider_getQuotaRemaining(const SearchProvider *self,
                                           const SearchProviderSlot *slot) {
     if (!self || !slot)
@@ -207,6 +220,7 @@ uint32_t SearchProvider_getQuotaRemaining(const SearchProvider *self,
     return (*slot).quotaRemaining;
 }
 
+/** Returns the slot's quota-reset Unix time, or zero when unavailable. */
 int64_t SearchProvider_getResetUnix(const SearchProvider *self,
                                     const SearchProviderSlot *slot) {
     if (!self || !slot)
@@ -214,12 +228,14 @@ int64_t SearchProvider_getResetUnix(const SearchProvider *self,
     return (*slot).resetUnix;
 }
 
+/** Returns the slot's optional human-readable credential-kind label. */
 const char *SearchProvider_getAuthKind(const SearchProvider *self,
                                        const SearchProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).authKind : nullptr;
 }
 
+/** Returns the slot's optional license-family label. */
 const char *SearchProvider_getLicenseFamily(const SearchProvider *self,
                                             const SearchProviderSlot *slot) {
     (void)self;
