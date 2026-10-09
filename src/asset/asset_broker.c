@@ -61,6 +61,7 @@
 
 // CONSTRUCTORS
 
+/** Creates a broker value using the default cache subdirectory and budget. */
 AssetBroker AssetBroker_0(void) {
     AssetBroker broker;
     memset(&broker, 0, sizeof(broker));
@@ -70,6 +71,7 @@ AssetBroker AssetBroker_0(void) {
     return broker;
 }
 
+/** Creates a broker value configured with the supplied cache subdirectory. */
 AssetBroker AssetBroker_1(const char *cacheSub) {
     AssetBroker broker = AssetBroker_0();
     if (cacheSub) {
@@ -84,6 +86,7 @@ AssetBroker AssetBroker_1(const char *cacheSub) {
 
 // CORE FUNCTIONS
 
+/** Copies one bounded source chunk to dest at usedLen, reporting capacity truncation. */
 bool AssetBroker_copyChunk(AssetBroker *self, const uint8_t *srcChunk, size_t chunkLen,
                            uint8_t *dest, size_t destCap, uint32_t *usedLen,
                            bool *outTruncated) {
@@ -115,6 +118,7 @@ bool AssetBroker_copyChunk(AssetBroker *self, const uint8_t *srcChunk, size_t ch
     return true;
 }
 
+/** Builds a relative cache path from the configured subdirectory and file name. */
 bool AssetBroker_cachePath(const AssetBroker *self, const char *fileName,
                            char *out, size_t outCap) {
     if (self == nullptr)
@@ -140,6 +144,7 @@ bool AssetBroker_cachePath(const AssetBroker *self, const char *fileName,
     return true;
 }
 
+/** Clears cancellation and the accumulated copied-byte count. */
 void AssetBroker_reset(AssetBroker *self) {
     if (self == nullptr)
         return;
@@ -147,6 +152,7 @@ void AssetBroker_reset(AssetBroker *self) {
     (*self).bytesCopied = 0;
 }
 
+/** Marks future chunk copies as cancelled. */
 void AssetBroker_cancel(AssetBroker *self) {
     if (self == nullptr)
         return;
@@ -155,6 +161,7 @@ void AssetBroker_cancel(AssetBroker *self) {
 
 // SETTERS
 
+/** Replaces the cache subdirectory only when the full name fits its field. */
 bool AssetBroker_setCacheSub(AssetBroker *self, const char *sub, bool *outTruncated) {
     if (self == nullptr)
         return false;
@@ -172,18 +179,21 @@ bool AssetBroker_setCacheSub(AssetBroker *self, const char *sub, bool *outTrunca
     return true;
 }
 
+/** Sets the per-chunk time budget used by the broker contract. */
 void AssetBroker_setChunkBudget(AssetBroker *self, uint64_t chunkBudgetMs) {
     if (self == nullptr)
         return;
     (*self).chunkBudgetMs = chunkBudgetMs;
 }
 
+/** Sets the broker's cancellation flag. */
 void AssetBroker_setCancelled(AssetBroker *self, bool cancelled) {
     if (self == nullptr)
         return;
     (*self).cancelled = cancelled;
 }
 
+/** Sets the reported cumulative number of bytes copied. */
 void AssetBroker_setBytesCopied(AssetBroker *self, uint32_t bytesCopied) {
     if (self == nullptr)
         return;
@@ -192,6 +202,7 @@ void AssetBroker_setBytesCopied(AssetBroker *self, uint32_t bytesCopied) {
 
 // GETTERS
 
+/** Copies the configured cache subdirectory into out when it fits. */
 bool AssetBroker_getCacheSub(const AssetBroker *self, char *out, size_t outCap) {
     if (self == nullptr)
         return false;
@@ -205,18 +216,21 @@ bool AssetBroker_getCacheSub(const AssetBroker *self, char *out, size_t outCap) 
     return true;
 }
 
+/** Returns the per-chunk budget, or zero for a null receiver. */
 uint64_t AssetBroker_getChunkBudget(const AssetBroker *self) {
     if (self == nullptr)
         return 0;
     return (*self).chunkBudgetMs;
 }
 
+/** Reports whether future copy operations are cancelled. */
 bool AssetBroker_isCancelled(const AssetBroker *self) {
     if (self == nullptr)
         return false;
     return (*self).cancelled;
 }
 
+/** Returns the cumulative copied-byte count, or zero for a null receiver. */
 uint32_t AssetBroker_getBytesCopied(const AssetBroker *self) {
     if (self == nullptr)
         return 0;
