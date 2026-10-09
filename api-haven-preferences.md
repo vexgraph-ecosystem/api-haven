@@ -74,4 +74,5 @@ Network telemetry streams must not induce memory allocator churn or thread stall
 
 ## 4. Readiness Cross-Reference (Living Documentation Law)
 
-- Feature readiness matrix: [api-haven](../../ecosystem/api-haven.md), rendered as `[[api-haven]]`.
+- Feature readiness matrix: [api-haven](https://gist.github.com/vex-graph/6943f92acb931b25dad1073c46da6ce7#file-api-haven-md).
+- Open blockers and deferred decisions: [ecosystem blockers Gist](https://gist.github.com/vex-graph/e921fa188eebbd0c68c4e59646109887).
