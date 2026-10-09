@@ -76,7 +76,7 @@ native IO/NIO is linked by default, preserving the C ABI, not rewritten into Rus
 Broader collection migration remains staged. R1 owns residency/lifetimes;
 no C/Rust atomic-layout compatibility or automatic schema migration is assumed.
 GPU shaders/dispatch remain Graphvex R3, not this connector driver. The full
-ecosystem map lives in `../../../README.md` and the readiness wiki.
+ecosystem map lives in `../../../README.md` and the readiness Gist.
 
 ### Build
 
