@@ -72,6 +72,7 @@
 
 // CONSTRUCTORS
 
+/** Creates a harness with no bound driver and the default timeout. */
 Harness Harness_0(void) {
     Harness self = { 0 };
     self.timeoutMs = HARNESS_DEFAULT_TIMEOUT_MS;
@@ -79,6 +80,7 @@ Harness Harness_0(void) {
     return self;
 }
 
+/** Creates a harness with no bound driver and the supplied default timeout. */
 Harness Harness_1(uint64_t timeoutMs) {
     Harness self = { 0 };
     self.timeoutMs = timeoutMs;
@@ -88,6 +90,7 @@ Harness Harness_1(uint64_t timeoutMs) {
 
 // CORE FUNCTIONS
 
+/** Starts a bounded driver job in an available slot and returns its job id. */
 bool Harness_run(Harness *self, const char *prompt, size_t promptLen,
                  uint64_t timeoutMs, uint32_t *outJobId) {
     if (!self)
@@ -137,6 +140,7 @@ bool Harness_run(Harness *self, const char *prompt, size_t promptLen,
     return true;
 }
 
+/** Polls the selected driver's job and updates the stored slot status. */
 HarnessStatus Harness_poll(Harness *self, uint32_t jobId) {
     if (!self || jobId == 0)
         return HARNESS_STATUS_IDLE;
@@ -159,6 +163,7 @@ HarnessStatus Harness_poll(Harness *self, uint32_t jobId) {
     return HARNESS_STATUS_IDLE;
 }
 
+/** Cancels a running job through the driver callback and clears its handle. */
 bool Harness_cancel(Harness *self, uint32_t jobId) {
     if (!self || jobId == 0)
         return false;
@@ -180,12 +185,14 @@ bool Harness_cancel(Harness *self, uint32_t jobId) {
 
 // SETTERS
 
+/** Sets the borrowed engine descriptor used by subsequent runs. */
 void Harness_setEngine(Harness *self, const EngineProviderSlot *engine) {
     if (!self)
         return;
     (*self).engine = engine;
 }
 
+/** Binds the opaque driver context and spawn/poll/cancel callback table. */
 void Harness_setDriver(Harness *self, void *driver, HarnessDriverTable table) {
     if (!self)
         return;
@@ -193,6 +200,7 @@ void Harness_setDriver(Harness *self, void *driver, HarnessDriverTable table) {
     (*self).table = table;
 }
 
+/** Sets the default timeout used when a run supplies no override. */
 void Harness_setTimeout(Harness *self, uint64_t timeoutMs) {
     if (!self)
         return;
@@ -201,20 +209,24 @@ void Harness_setTimeout(Harness *self, uint64_t timeoutMs) {
 
 // GETTERS
 
+/** Returns the borrowed engine descriptor, or nullptr when unset. */
 const EngineProviderSlot *Harness_getEngine(const Harness *self) {
     return self ? (*self).engine : nullptr;
 }
 
+/** Returns the opaque driver context, or nullptr for a null receiver. */
 void *Harness_getDriver(const Harness *self) {
     return self ? (*self).driver : nullptr;
 }
 
+/** Returns the default timeout, or zero for a null receiver. */
 uint64_t Harness_getTimeout(const Harness *self) {
     if (!self)
         return 0;
     return (*self).timeoutMs;
 }
 
+/** Reports whether any recorded job currently has running status. */
 bool Harness_isRunning(const Harness *self) {
     if (!self)
         return false;
@@ -226,12 +238,14 @@ bool Harness_isRunning(const Harness *self) {
     return false;
 }
 
+/** Returns the number of job slots issued so far. */
 uint32_t Harness_getJobCount(const Harness *self) {
     if (!self)
         return 0;
     return (*self).jobCount;
 }
 
+/** Returns the job record at index i, or nullptr when out of range. */
 const HarnessJob *Harness_getJobAt(const Harness *self, uint32_t i) {
     if (!self)
         return nullptr;
@@ -240,6 +254,7 @@ const HarnessJob *Harness_getJobAt(const Harness *self, uint32_t i) {
     return &(*self).jobs[i];
 }
 
+/** Returns the stored status for jobId, or idle when the id is unknown. */
 HarnessStatus Harness_getJobStatus(const Harness *self, uint32_t jobId) {
     if (!self || jobId == 0)
         return HARNESS_STATUS_IDLE;
@@ -251,6 +266,7 @@ HarnessStatus Harness_getJobStatus(const Harness *self, uint32_t jobId) {
     return HARNESS_STATUS_IDLE;
 }
 
+/** Returns the most recently recorded run result. */
 HarnessStatus Harness_getLastStatus(const Harness *self) {
     if (!self)
         return HARNESS_STATUS_IDLE;
