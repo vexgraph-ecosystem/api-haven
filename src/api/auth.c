@@ -39,12 +39,14 @@
  */
 
 // CONSTRUCTORS
+/** Creates an authentication descriptor that adds no credential header. */
 ApiAuth ApiAuth_none(void) {
     ApiAuth auth = { 0 };
     auth.kind = API_AUTH_NONE;
     return auth;
 }
 
+/** Creates a descriptor for a caller-owned API-key header and value. */
 ApiAuth ApiAuth_apiKey(const char *headerName, const char *key) {
     ApiAuth auth = { 0 };
     auth.kind = API_AUTH_API_KEY;
@@ -53,6 +55,7 @@ ApiAuth ApiAuth_apiKey(const char *headerName, const char *key) {
     return auth;
 }
 
+/** Creates a descriptor for a caller-owned bearer token. */
 ApiAuth ApiAuth_bearer(const char *token) {
     ApiAuth auth = { 0 };
     auth.kind = API_AUTH_BEARER;
@@ -60,6 +63,7 @@ ApiAuth ApiAuth_bearer(const char *token) {
     return auth;
 }
 
+/** Creates a bearer descriptor whose token is obtained from the supplied callback. */
 ApiAuth ApiAuth_bearerFn(ApiTokenFn fn, void *userdata) {
     ApiAuth auth = { 0 };
     auth.kind = API_AUTH_BEARER_FN;
@@ -69,6 +73,7 @@ ApiAuth ApiAuth_bearerFn(ApiTokenFn fn, void *userdata) {
 }
 
 // CORE FUNCTIONS
+/** Copies the selected credential into valueBuf and returns its header name. */
 bool ApiAuth_apply(const ApiAuth *auth, const char **nameOut,
                    char *valueBuf, size_t valueCap) {
     if (!auth || !nameOut || !valueBuf || valueCap == 0)

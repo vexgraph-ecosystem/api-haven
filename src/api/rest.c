@@ -26,6 +26,7 @@
  * ============================================================================
  */
 
+/** Parses the URL into bounded scheme, host, port, and path outputs. */
 static bool parseUrl(const char *url, char *scheme, size_t schemeCap,
                      char *host, size_t hostCap, int *port,
                      char *path, size_t pathCap) {
@@ -77,6 +78,7 @@ static bool parseUrl(const char *url, char *scheme, size_t schemeCap,
     return true;
 }
 
+/** Builds and performs one bounded JSON HTTP request using the shared transport. */
 static bool perform(const char *url, const ApiAuth *auth, const char *method,
                     const char *body, size_t bodyLen, HttpResponse *resp) {
     if (!url || !method || !resp)
@@ -119,11 +121,13 @@ static bool perform(const char *url, const ApiAuth *auth, const char *method,
 }
 
 // CORE FUNCTIONS
+/** Sends a JSON request body and stores the transport result in resp. */
 bool Rest_postJson(const char *url, const ApiAuth *auth,
                    const char *jsonBody, size_t jsonLen, HttpResponse *resp) {
     return perform(url, auth, "POST", jsonBody, jsonLen, resp);
 }
 
+/** Sends an authenticated or unauthenticated GET and stores the result in resp. */
 bool Rest_get(const char *url, const ApiAuth *auth, HttpResponse *resp) {
     return perform(url, auth, "GET", nullptr, 0, resp);
 }
