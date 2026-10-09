@@ -70,24 +70,28 @@ static DbProvider sDbProviderShared; // zero-init singleton
 
 // CONSTRUCTORS
 
+/** Returns the process-wide immutable database-source directory handle. */
 DbProvider *DbProvider_shared(void) {
     return &sDbProviderShared;
 }
 
 // CORE FUNCTIONS
 
+/** Returns the directory row count, or zero for a null receiver. */
 uint32_t DbProvider_count(const DbProvider *self) {
     if (!self)
         return 0;
     return kDbProviderCount;
 }
 
+/** Returns the row at index i, or nullptr for a null receiver or invalid index. */
 const DbProviderSlot *DbProvider_at(const DbProvider *self, uint32_t i) {
     if (!self || i >= kDbProviderCount)
         return nullptr;
     return &kDbProviders[i];
 }
 
+/** Finds a database source by exact slug, returning nullptr when absent. */
 const DbProviderSlot *DbProvider_get(const DbProvider *self, const char *slug) {
     if (!self || !slug || (*slug) == '\0')
         return nullptr;
@@ -98,6 +102,7 @@ const DbProviderSlot *DbProvider_get(const DbProvider *self, const char *slug) {
     return nullptr;
 }
 
+/** Finds the first directory row with the requested engine key. */
 const DbProviderSlot *DbProvider_findByEngine(const DbProvider *self,
                                               const char *engine) {
     if (!self || !engine || (*engine) == '\0')
@@ -111,33 +116,39 @@ const DbProviderSlot *DbProvider_findByEngine(const DbProvider *self,
 
 // GETTERS
 
+/** Returns the slot's canonical slug, or nullptr when no slot is supplied. */
 const char *DbProvider_getSlug(const DbProvider *self, const DbProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).slug : nullptr;
 }
 
+/** Returns the slot's display label, or nullptr when no slot is supplied. */
 const char *DbProvider_getDisplayName(const DbProvider *self, const DbProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).displayName : nullptr;
 }
 
+/** Returns the slot's driver/engine key, or nullptr when no slot is supplied. */
 const char *DbProvider_getEngine(const DbProvider *self, const DbProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).engine : nullptr;
 }
 
+/** Returns the slot's canonical wire port, or zero when unavailable. */
 uint16_t DbProvider_getDefaultPort(const DbProvider *self, const DbProviderSlot *slot) {
     if (!self || !slot)
         return 0;
     return (*slot).defaultPort;
 }
 
+/** Returns the slot's wire family, or the documented safe default. */
 DbProviderFamily DbProvider_getFamily(const DbProvider *self, const DbProviderSlot *slot) {
     if (!self || !slot)
         return DB_PROVIDER_FAMILY_SQL; // safe default
     return (*slot).family;
 }
 
+/** Returns the slot's optional provider note. */
 const char *DbProvider_getNote(const DbProvider *self, const DbProviderSlot *slot) {
     (void)self;
     return slot ? (*slot).note : nullptr;
