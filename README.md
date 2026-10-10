@@ -1,18 +1,5 @@
 # api-haven
 
-## CLion: CMake is IDE metadata only
-
-Open this repository root as a CMake project. `CMakeLists.txt` provides C23
-source targets, include paths and flags for navigation, diagnostics and inlay
-hints. Targets are excluded from the default build; no linking, dependency
-downloads or application runner are wired into it. Set `VEXSPOKE_SOURCE_DIR`
-to a local Vexspoke `src/`. Missing headers stay real IDE errors; no fake
-declarations are generated. IDE appearance is user-verified.
-
-Build with [b](https://github.com/vex-graph/b), not this adapter. From the
-Vexgraph workspace root: `./tools/b build api_haven`. IDE configuration does
-not prove standalone runtime dependency closure.
-
 ## Current State
 
 **Role:** R3 connector/AI switchboard driver — blessed connectors behind one
@@ -85,10 +72,9 @@ ecosystem map lives in `../../../README.md` and the readiness Gist.
 ```
 
 ### Standalone autonomy
-The Standalone Autonomy Law still requires runtime dependency closure. This
-IDE-only adapter exports no runtime library and never fetches dependencies;
-supply local headers with `VEXSPOKE_SOURCE_DIR`. A successful IDE configure
-is not a standalone runtime build.
+The Standalone Autonomy Law requires runtime dependency closure through
+[b](https://github.com/vex-graph/b), with real R2 headers and implementations.
+Workspace indexing is not a standalone runtime build.
 
 ---
 
@@ -107,7 +93,7 @@ is not a standalone runtime build.
 * **`mcp/mcp_server.h/.c`** — L3 Model Context Protocol engine (`McpServer`): newline-delimited JSON-RPC 2.0 server core hosting the connector surface as 14 tools (`app_detect`, `capture_status`, `ai_provider_lookup`, `db_data_source_lookup`, `engine_list`, `harness_run`, `harness_poll`, `app_list`, `app_action`, `app_poll`, `search_list`, `web_search`, `asset_lookup`, `asset_download`) and 7 resources (`system://apps`, `system://capture`, `db://data-sources`, `engines://catalog`, `apps://catalog`, `search://providers`, `assets://catalog`). Version negotiation (2024-11-05 / 2025-03-26 / 2025-06-18), verbatim id echo, notification silence, zero allocation — caller-owned buffers, single-threaded, fn-pointer tool tables. Tools read registries/probes only, no exec, no writes (protocol boundary).
 * **`src/main/mcp_main.c`** — stdio runner (`mcp_server` executable): one JSON-RPC line per stdin line, response on stdout (flushed), logs on stderr only so the JSON wire stays parseable by MCP clients. EOF exits 0.
 * **`com/discord/discord.h/.c`** & **`src/api/client.c`** — C Discord webhook transmitter and the telemetry client. The legacy Java surface is not present in this checkout (there is no `attic/` directory).
-* **[b](https://github.com/vex-graph/b)** — the actual build system (`./tools/b`); this repo's CMake file is indexing metadata only.
+* **[b](https://github.com/vex-graph/b)** — the build system (`./tools/b`).
 
 ---
 
