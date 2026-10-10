@@ -13,7 +13,11 @@
  * ============================================================================
  * URL parsing, auth injection, and HTTP transport in one place. Drivers
  * hand over (url, auth, JSON body) and get back an HttpResponse in their
- * own buffer. Canonical home of parseUrl (client.c / discord.c copies
+ * own buffer. Success means a completed transport AND a 2xx status; a
+ * 4xx/5xx/3xx result returns false while the caller's resp keeps the
+ * transferred status and body for inspection. An explicitly required
+ * credential that cannot be rendered fails closed (no request is sent).
+ * Canonical home of parseUrl (client.c / discord.c copies
  * migrate here later per Rule 33).
  *
  * STRUCT FIELDS: none — procedural core over HttpRequest/HttpResponse.
@@ -78,6 +82,11 @@ static bool parseUrl(const char *url, char *scheme, size_t schemeCap,
     return true;
 }
 
+/** A transferred response is a success only on a 2xx status; redirects and errors are not. */
+static bool statusIsSuccess(int status) {
+    return status >= 200 && status < 300;
+}
+
 /** Builds and performs one bounded JSON HTTP request using the shared transport. */
 static bool perform(const char *url, const ApiAuth *auth, const char *method,
                     const char *body, size_t bodyLen, HttpResponse *resp) {
@@ -96,7 +105,12 @@ static bool perform(const char *url, const ApiAuth *auth, const char *method,
     headers[headerCount].name = "Content-Type";
     headers[headerCount].value = "application/json";
     headerCount++;
-    if (auth && ApiAuth_apply(auth, &authName, authValue, sizeof(authValue))) {
+    // Fail closed: an explicitly required credential (kind != NONE) that cannot be
+    // rendered must not silently become an unauthenticated request. A nullptr auth,
+    // or NONE, is an intentional public request and carries no header.
+    if (auth && (*auth).kind != API_AUTH_NONE) {
+        if (!ApiAuth_apply(auth, &authName, authValue, sizeof(authValue)))
+            return false;
         headers[headerCount].name = authName;
         headers[headerCount].value = authValue;
         headerCount++;
@@ -116,8 +130,12 @@ static bool perform(const char *url, const ApiAuth *auth, const char *method,
         .bodyLen = bodyLen,
         .timeoutMs = 5000
     };
-    Http_perform(&req, resp);
-    return (*resp).ok;
+    // The transport reports only that an exchange completed; the application
+    // result is the status. On failure the caller's resp keeps the transferred
+    // status/body so a 4xx/5xx error body can still be read.
+    if (!Http_perform(&req, resp))
+        return false;
+    return statusIsSuccess((*resp).status);
 }
 
 // CORE FUNCTIONS
