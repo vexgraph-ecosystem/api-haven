@@ -48,7 +48,7 @@ Historical code preserves context but must never pollute the pure C23 compilatio
 
 #### The Rule:
 1. **No Attic Includes:** Code in `src/api` or `src/com` must never include headers or references from `attic/`.
-2. **Build Isolation:** CMake configurations ignore `attic/` completely.
+2. **Build Isolation:** Production and workspace indexing configurations ignore `attic/` completely.
 
 ---
 
