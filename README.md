@@ -17,9 +17,9 @@ normalized contract, plus the MCP tool/resource server. A library, not a product
   JSON-RPC core (`McpServer`, 14 tools + 7 resources; the `mcp_server` runner is
   `src/main/mcp_main.c`).
 
-**Proven:** owner tests exist and are wired under `tests/api-haven/`; the ledger
+**Proven:** owner tests exist and are wired under `../../tests/api-haven`; the ledger
 records executed evidence only for `storage/snapshot_io.h` (via
-`tests/sesh/run.py`). The rest is **not ledger-proven** — test files existing is
+`../../tests/sesh/run.py`). The rest is **not ledger-proven** — test files existing is
 not executed proof (the Timestamped Test Checklist Law).
 
 **Stubbed / draft / absent:** no TLS backend anywhere (`web_search` fails closed
@@ -63,7 +63,7 @@ native IO/NIO is linked by default, preserving the C ABI, not rewritten into Rus
 Broader collection migration remains staged. R1 owns residency/lifetimes;
 no C/Rust atomic-layout compatibility or automatic schema migration is assumed.
 GPU shaders/dispatch remain Graphvex R3, not this connector driver. The full
-ecosystem map lives in `../../../README.md` and the readiness Gist.
+ecosystem map lives in `../../README.md` and the readiness Gist.
 
 ### Build
 

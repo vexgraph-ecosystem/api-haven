@@ -1,15 +1,15 @@
 # api-haven — Repo-Local Living Preferences
 > Repo-local preferences governed by the Living Documentation Law.
-> Universal Supreme Constitution: workspace-root preferences.md, published on Gist.
+> Universal Supreme Constitution: workspace gist/PREFERENCES.md, published on Gist.
 
 ## 0. Constitution Link (supreme)
-- [preferences.md](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a) — real, Git-ignored workspace-root file at ../../../preferences.md, not a tracked Vexspoke file or symlink.
-- All universal laws in `../../../preferences.md` are mandatory and binding across the ecosystem.
+- [preferences.md](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a) — real, Git-ignored workspace file at `../../gist/PREFERENCES.md`, not a tracked Vexspoke file or symlink.
+- All universal laws in `../../gist/PREFERENCES.md` are mandatory and binding across the ecosystem.
 - This document codifies **exclusive** preferences for `api-haven` (R3 API Connector). R3 borrows Vexspoke CPU computation/behavior and Relational Engine memory/storage contracts. The default production build resolves migrated IO/NIO from RE, preserving the native Memory ABI; this is not a Rust allocator rewrite. Network/connector semantics remain API-owned.
 
 ## 1. Repo-Local Law Index (Binding Matrix)
 
-Universal laws are inherited from the canonical `../../../preferences.md` Index; this table indexes the additional laws specific to this repository.
+Universal laws are inherited from the canonical `../../gist/PREFERENCES.md` Index; this table indexes the additional laws specific to this repository.
 
 | Law Title | Scope | Enforcement |
 | :--- | :--- | :--- |
