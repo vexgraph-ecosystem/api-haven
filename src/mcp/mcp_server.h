@@ -10,7 +10,7 @@
 
 // mcp/mcp_server.h — Model Context Protocol server engine (JSON-RPC 2.0).
 //
-// The api-haven CLI/MCP layer (preferences.md Rule 17): exposes the
+// The api-haven CLI/MCP layer (PREFERENCES.md Rule 17): exposes the
 // vexspoke system probes (AppDetect, CaptureTool), the api-haven
 // catalogs (AiProvider, DbProvider, AssetProvider), and the bounded
 // driver seams (Harness, AppBroker, SearchProvider) as MCP tools +

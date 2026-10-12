@@ -57,7 +57,7 @@
  *     getFamily / getNote(self, slot)
  * ============================================================================
  */
-;;INTENTION("directory database/ holds adapter descriptors only: driver/engine keys + wire ports for future connectors; real drivers/engines live outside api-haven with zero includes — preferences.md Rule 17 api-haven clause")
+;;INTENTION("directory database/ holds adapter descriptors only: driver/engine keys + wire ports for future connectors; real drivers/engines live outside api-haven with zero includes — PREFERENCES.md Rule 17 api-haven clause")
 ;;INTENTION("source image clipped at PostgreSQL (P) — Q-Z rows are not invented; appended when the owner scrolls the dialog (see tools/gen_db_providers.py banner)")
 ;;INTENTION("immutable slot records — setters omitted; data is static const; access via DbProvider_* table functions — Rule 33 Tier-2 waiver")
 
