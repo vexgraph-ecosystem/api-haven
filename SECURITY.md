@@ -28,13 +28,21 @@ opens a connection itself.
   early-exit.
 - `;;SECURITY` marks each site that carries one of these obligations.
 
-## Endpoint trust
+## Endpoint trust — parsed today, policy NOT implemented
 
-- Endpoint policy is enforced **before** a request is made: scheme and host are
-  checked by one parser, and metadata addresses (`169.254.169.254`), localhost
-  and LAN ranges, `file://`, IPv6 loopback and userinfo abuse are refused.
-- Redirects are classified, and credentials are not forwarded cross-origin.
-- The MCP search base override cannot be pointed at an arbitrary internal host.
+**Verified:** `rest.c` carries a bounded `parseUrl` that splits scheme, host, port
+and path into caller-sized buffers, so a malformed URL cannot overrun. That is a
+*parse*, not a policy.
+
+**Not implemented:** nothing in `src/` rejects a metadata address
+(`169.254.169.254`), localhost, a LAN range, `file://`, an IPv6 loopback or
+userinfo abuse — those tokens appear nowhere in the tree. Redirect classification
+and cross-origin credential stripping are likewise absent.
+
+Until those exist, **no caller may treat this repository as an SSRF control.**
+The endpoint policy is enforced by whoever supplies the endpoint and the
+transport — the host — and this file must be updated in the same cycle that the
+policy lands here.
 
 ## Provider responses are an injection channel
 
