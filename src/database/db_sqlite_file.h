@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include "c23/constructor.h"
 
 // database/db_sqlite_file.h — the DbSqliteFile class: catalog-only
 // read-only SQLite file descriptor (L1 metadata, R2 api-haven).
@@ -11,7 +12,7 @@
 // A file row the DbProvider directory points at but never opens: path,
 // capability caps, byte bounds, and an fn-table for execution. Zero
 // `sqlite3.h` include/link — execution delegates through the opaque
-// handle to the database owner (db-haven/darkbase `Database` interface)
+// handle to the database owner (db-haven/darkbase-engine `Database` interface)
 // or vexspoke File/VFS. Read-only by construction: no write path
 // exists on this class (Rule 17: drivers live outside api-haven).
 
@@ -39,6 +40,7 @@ struct DbSqliteFile {
 // --- Constructors (value structs, no allocation) ---
 DbSqliteFile DbSqliteFile_0(void);           // undescribed, read-only
 DbSqliteFile DbSqliteFile_1(const char *path); // described path, read-only
+#define DbSqliteFile(...) CONSTRUCTOR_DISPATCH(DbSqliteFile, __VA_ARGS__)
 
 // --- Core functions ---
 // Bind the owner's read path (borrowed handle + table, never owned).

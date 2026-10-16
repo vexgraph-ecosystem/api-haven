@@ -5,7 +5,7 @@
 
 // ai/ai_provider.h — the AI provider directory (L1 descriptor table).
 //
-// One behavior class owns the whole ecosystem: names, native endpoints,
+// One behavior class owns the whole vexgraph-ecosystem-gitrepo: names, native endpoints,
 // wire-contract families, auth schemes, and region buckets for every
 // provider the engine may talk to. Rows are static const slot records
 // (see ai_provider.c); this header declares the schema and the table API.

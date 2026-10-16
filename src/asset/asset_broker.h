@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include "c23/constructor.h"
 
 // asset/asset_broker.h — the AssetBroker class: bounded chunked-copy
 // downloader into the VexHome cache (L2 behavior, R2 api-haven).
@@ -15,7 +16,8 @@
 // budget (Rule 27: a dead source drops one chunk, not the teardown).
 // Truncation is never silent: dest overflow returns false and sets the
 // flag (Rule 35.3). Zero sockets, zero threads, zero allocation, no
-// exec, no vendor SDK — transports stay in R1, driven by R0.
+// exec, no vendor SDK — this file only copies caller-supplied chunks. No
+// network transport or socket adapter is implemented here.
 
 // Per-chunk copy ceiling: one chunk never exceeds 64KiB.
 #define ASSET_BROKER_CHUNK_CAP 65536u
@@ -34,6 +36,7 @@ typedef struct AssetBroker {
 // --- Constructors (value structs, no allocation) ---
 AssetBroker AssetBroker_0(void);                    // "assets" sub, 100ms
 AssetBroker AssetBroker_1(const char *cacheSub);    // named cache slot
+#define AssetBroker(...) CONSTRUCTOR_DISPATCH(AssetBroker, __VA_ARGS__)
 
 // --- Core functions ---
 // Bounded chunked copy: one srcChunk (chunkLen Bytes) into dest at the
@@ -64,9 +67,8 @@ void AssetBroker_setCancelled(AssetBroker *self, bool cancelled);
 void AssetBroker_setBytesCopied(AssetBroker *self, uint32_t bytesCopied);
 
 // --- Getters (Rule 24, null-safe) ---
-// Cache slot into caller-owned out (NUL always). False on NULL
-// self/out or zero cap. Dest-last per Rule 9.
-bool AssetBroker_getCacheSub(const AssetBroker *self, char *out, size_t outCap);
+// Borrowed cache slot, valid until the slot changes or the broker is destroyed.
+const char *AssetBroker_getCacheSub(const AssetBroker *self);
 uint64_t AssetBroker_getChunkBudget(const AssetBroker *self);
 bool AssetBroker_isCancelled(const AssetBroker *self);
 uint32_t AssetBroker_getBytesCopied(const AssetBroker *self);

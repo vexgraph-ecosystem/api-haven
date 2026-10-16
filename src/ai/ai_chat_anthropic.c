@@ -90,7 +90,7 @@ AiChatAnthropic AiChatAnthropic_0(void) {
 
 /** Initializes an Anthropic chat value with a model and shared provider directory. */
 AiChatAnthropic AiChatAnthropic_1(const char *model) {
-    AiChatAnthropic chat = AiChatAnthropic_0();
+    AiChatAnthropic chat = AiChatAnthropic();
     // provider borrows the shared singleton so directory calls are legal.
     chat.provider = AiProvider_shared();
     chat.model = model;
@@ -99,7 +99,7 @@ AiChatAnthropic AiChatAnthropic_1(const char *model) {
 
 /** Initializes an Anthropic chat value with a model and borrowed API key. */
 AiChatAnthropic AiChatAnthropic_2(const char *model, const char *apiKey) {
-    AiChatAnthropic chat = AiChatAnthropic_1(model);
+    AiChatAnthropic chat = AiChatAnthropic(model);
     chat.apiKey = apiKey;
     return chat;
 }

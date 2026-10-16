@@ -103,7 +103,7 @@ AiChatGemini AiChatGemini_0(void) {
 
 /** Initializes a Gemini chat value with a model and shared provider directory. */
 AiChatGemini AiChatGemini_1(const char *model) {
-    AiChatGemini chat = AiChatGemini_0();
+    AiChatGemini chat = AiChatGemini();
     // provider borrows the shared singleton so directory calls are legal.
     chat.provider = AiProvider_shared();
     chat.model = model;
@@ -112,7 +112,7 @@ AiChatGemini AiChatGemini_1(const char *model) {
 
 /** Initializes a Gemini chat value with a model and borrowed API key. */
 AiChatGemini AiChatGemini_2(const char *model, const char *apiKey) {
-    AiChatGemini chat = AiChatGemini_1(model);
+    AiChatGemini chat = AiChatGemini(model);
     chat.apiKey = apiKey;
     return chat;
 }

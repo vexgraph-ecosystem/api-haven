@@ -8,10 +8,10 @@
 /**
  * ============================================================================
  * CLASS: AiSse (ai/ai_sse)
- * R0-budgeted slot binding, zero socket/thread/alloc)
+ * caller-budgeted slot binding, zero socket/thread/alloc)
  * ============================================================================
- * Incremental Server-Sent Events decoder for AI token streams. The R0
- * host polls exactly one bound HavenWsFanout slot in 100ms slices
+ * Incremental Server-Sent Events decoder for AI token streams. A host
+ * caller may poll one bound HavenWsFanout slot in 100ms slices
  * (HavenWsFanout_pollStep) and feeds the delivered Bytes here with
  * AiSse_feed — this file never touches a socket, spawns a thread, or
  * allocates. Feed parses `event:` / `data:` lines (`:` comments
@@ -57,10 +57,10 @@
  *   - AiSse_isCancelled(self)
  *   - AiSse_isDone(self)
  *   - AiSse_getLineLen(self)
- *   - AiSse_getEvent(self, out, outCap)
+ *   - AiSse_getEvent(self)
  * ============================================================================
  */
-;;INTENTION("fanout-slot SSE binding: AiSse borrows one HavenWsFanout slot via the existing WsSource table — R0 owns the socket, R1 owns the transport, this class only decodes caller-fed Bytes (Rule 33 canonical move, Tier 1 preserved)")
+;;INTENTION("fanout-slot SSE binding: AiSse borrows one HavenWsFanout slot via the existing WsSource table; this class only decodes caller-fed Bytes. No socket adapter is implemented in this workspace.")
 
 // --- static helpers ---------------------------------------------------------
 
@@ -304,16 +304,7 @@ uint32_t AiSse_getLineLen(const AiSse *self) {
     return (*self).lineLen;
 }
 
-/** Copies the current event name to out when it fits including its terminator. */
-bool AiSse_getEvent(const AiSse *self, char *out, size_t outCap) {
-    if (self == nullptr)
-        return false;
-    if (out == nullptr || outCap == 0)
-        return false;
-    const char *ev = (*self).eventBuf;
-    size_t n = strlen(ev);
-    if (n + 1 > outCap)
-        return false;
-    memcpy(out, ev, n + 1);
-    return true;
+/** Returns a borrowed view of the current event name. */
+const char *AiSse_getEvent(const AiSse *self) {
+    return self ? (*self).eventBuf : nullptr;
 }

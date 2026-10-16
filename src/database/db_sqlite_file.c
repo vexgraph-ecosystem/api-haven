@@ -15,7 +15,7 @@
  * a borrowed path, capability caps, byte bounds, and the owner's
  * fn-table — with zero sqlite3.h include/link. Execution delegates
  * through the bound opaque handle to the database owner (db-haven /
- * darkbase Database interface) or vexspoke File/VFS; unbound exec
+ * darkbase-engine Database interface) or vexspoke File/VFS; unbound exec
  * drop-degrades to false. Read-only by construction: no write path
  * exists on this class. Value struct, zero allocation, immutable reads
  * without locks.
@@ -68,7 +68,7 @@ DbSqliteFile DbSqliteFile_0(void) {
 
 /** Creates a read-only descriptor for the borrowed path with read capability. */
 DbSqliteFile DbSqliteFile_1(const char *path) {
-    DbSqliteFile file = DbSqliteFile_0();
+    DbSqliteFile file = DbSqliteFile();
     file.path = path;
     file.caps = DB_SQLITE_CAP_READ;
     return file;

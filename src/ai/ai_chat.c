@@ -86,7 +86,7 @@ AiChat AiChat_0(void) {
 
 /** Initializes a chat value with a model and the shared provider directory. */
 AiChat AiChat_1(const char *model) {
-    AiChat chat = AiChat_0();
+    AiChat chat = AiChat();
     // provider borrows the shared singleton so directory calls are legal.
     chat.provider = AiProvider_shared();
     chat.model = model;
@@ -95,7 +95,7 @@ AiChat AiChat_1(const char *model) {
 
 /** Initializes a chat value with a model and borrowed API key. */
 AiChat AiChat_2(const char *model, const char *apiKey) {
-    AiChat chat = AiChat_1(model);
+    AiChat chat = AiChat(model);
     chat.apiKey = apiKey;
     return chat;
 }

@@ -50,14 +50,14 @@
  *   - AssetBroker_setBytesCopied(self, bytesCopied)
  *
  * Getters:
- *   - AssetBroker_getCacheSub(self, out, outCap)
+ *   - AssetBroker_getCacheSub(self)
  *   - AssetBroker_getChunkBudget(self)
  *   - AssetBroker_isCancelled(self)
  *   - AssetBroker_getBytesCopied(self)
  * ============================================================================
  */
 ;;INTENTION("per-chunk budgets, never a whole-file budget: a 100ms slice bounds one 64KiB copy — a stall drops the chunk and the join still lands (Rule 27)")
-;;INTENTION("cache-confined by construction: the broker shapes relative cache paths only — VexHome_cache resolution and file close-before-free stay with the R0 host (Rule 26)")
+;;INTENTION("cache-confined by construction: the broker shapes relative cache paths only — VexHome_cache resolution and file close-before-free stay with the caller (Rule 26)")
 
 // CONSTRUCTORS
 
@@ -73,7 +73,7 @@ AssetBroker AssetBroker_0(void) {
 
 /** Creates a broker value configured with the supplied cache subdirectory. */
 AssetBroker AssetBroker_1(const char *cacheSub) {
-    AssetBroker broker = AssetBroker_0();
+    AssetBroker broker = AssetBroker();
     if (cacheSub) {
         size_t n = strlen(cacheSub);
         if (n >= ASSET_BROKER_CACHE_SUB_CAP)
@@ -202,18 +202,9 @@ void AssetBroker_setBytesCopied(AssetBroker *self, uint32_t bytesCopied) {
 
 // GETTERS
 
-/** Copies the configured cache subdirectory into out when it fits. */
-bool AssetBroker_getCacheSub(const AssetBroker *self, char *out, size_t outCap) {
-    if (self == nullptr)
-        return false;
-    if (out == nullptr || outCap == 0)
-        return false;
-    const char *sub = (*self).cacheSub;
-    size_t n = strlen(sub);
-    if (n + 1 > outCap)
-        return false;
-    memcpy(out, sub, n + 1);
-    return true;
+/** Returns a borrowed view of the configured cache subdirectory. */
+const char *AssetBroker_getCacheSub(const AssetBroker *self) {
+    return self ? (*self).cacheSub : nullptr;
 }
 
 /** Returns the per-chunk budget, or zero for a null receiver. */

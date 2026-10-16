@@ -6,11 +6,12 @@
 #include <stdint.h>
 
 #include "api/haven_ws_fanout.h"
+#include "c23/constructor.h"
 
 // ai/ai_sse.h — the AiSse class: pure incremental SSE stream decoder
 // (L2 behavior, R2 api-haven).
 //
-// Caller-fed Bytes only: the R0 host polls one bound HavenWsFanout slot
+// Caller-fed Bytes only: a host caller may poll one bound HavenWsFanout slot
 // (100ms slices via HavenWsFanout_pollStep) and feeds the delivered Bytes
 // here with AiSse_feed. No sockets, no threads, no allocation, no logging
 // on the feed path (Rule 35 hot-minimal: one nullptr entry guard only).
@@ -18,7 +19,7 @@
 // flag (Rule 35.3). Cold-seam matrix (nullptr/empty/overflow/truncation/
 // cancelled/timeout) lives in ai/tests/ai_sse_test.c only.
 
-// Per-slice poll bound (Rule 27): one R0 slice never exceeds 100ms.
+// Per-slice poll bound (Rule 27): one caller-supplied slice never exceeds 100ms.
 #define AI_SSE_POLL_BUDGET_MS 100u
 // Longest buffered partial line (SSE comment churn included).
 #define AI_SSE_LINE_CAP 2048u
@@ -38,6 +39,7 @@ typedef struct AiSse {
 
 // --- Constructor (value struct, no allocation) ---
 AiSse AiSse_0(void);
+#define AiSse(...) CONSTRUCTOR_DISPATCH(AiSse, __VA_ARGS__)
 
 // --- Core functions ---
 // Feed caller-owned Bytes; decoded data: payloads append into textOut
@@ -69,8 +71,7 @@ uint64_t AiSse_getTimeout(const AiSse *self);
 bool AiSse_isCancelled(const AiSse *self);
 bool AiSse_isDone(const AiSse *self);
 uint32_t AiSse_getLineLen(const AiSse *self);
-// Current event name into caller-owned out (NUL always). False on NULL
-// self/out or zero cap. Dest-last per Rule 9.
-bool AiSse_getEvent(const AiSse *self, char *out, size_t outCap);
+// Borrowed current event name, valid until the next feed/reset or destruction.
+const char *AiSse_getEvent(const AiSse *self);
 
 #endif

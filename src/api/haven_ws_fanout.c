@@ -12,11 +12,12 @@
  * ============================================================================
  * A fixed fan-out table over opaque socket handles for the R2 layer: at
  * most 16 slots, each pairing a borrowed void* handle with its WsSource
- * fn-table {connect, poll, send, close}. The R0 host drives delivery by
+ * fn-table {connect, poll, send, close}. A host caller drives delivery by
  * calling HavenWsFanout_pollStep per tick with a millisecond budget —
- * zero pthread_*, zero socket syscalls in this file. Transports live in
- * vexspoke R1 (WsClient fed by the R0 socket owner); this registry only
- * fans out over them via the opaque seam (Rule 33 canonical move).
+ * zero pthread_*, zero socket syscalls in this file. The supplied callbacks
+ * are an external seam; no socket adapter is implemented in this workspace.
+ * FrameInbox is a bounded byte inbox, not a socket transport. This registry only
+ * fans out over callback slots.
  *
  * STRUCT FIELDS (Mirroring api/haven_ws_fanout.h — exactly this
  * file's class):
@@ -49,7 +50,7 @@
  *   - HavenWsFanout_getHandle(fanout, i)
  * ============================================================================
  */
-;;INTENTION("haven fan-out registry driven by R0, no threads: pollStep fans a millisecond budget over opaque WsSource slots; sockets and threads stay in R0/R1")
+;;INTENTION("host-driven fan-out registry with no threads: pollStep fans a millisecond budget over opaque WsSource slots; actual socket adapters are outside this implementation")
 ;;DRAFT
 
 // haven_ws_fanout.c — HavenWsFanout port. Fixed table, borrowed handles,
