@@ -22,47 +22,47 @@ Universal laws are inherited from the canonical `../../gist/PREFERENCES.md` Inde
 ### Asset Sourcing Law — Legal-Sense, First-Class In-App Marketplace Policy
 
 #### Definition:
-Every external asset source (images, 3D, textures, audio) is a row in api-haven's AssetProvider descriptor registry. Only blessed public APIs and direct-download URLs offered by the source are wired. Sources without a public search API are catalog-only rows with curated static manifests and hand-verified URLs, or excluded. Interface scraping — parsing another service's HTML/JSON to fake a search API, or bypassing auth — is a defect, always.
+Each external image, 3D, texture or audio source is an AssetProvider descriptor row. Wire only blessed public APIs and source-offered direct-download URLs. Sources without public search APIs are catalog-only via curated static manifests and hand-verified URLs, or excluded. Never scrape interfaces (HTML/JSON) to fake search or bypass auth.
 
 #### The Why:
-Legal exposure, broken trust, and brittle integrations come from scraping. A first-class in-app marketplace must be built on explicit contracts, normalized shapes, and license-aware flows — not on reverse-engineered endpoints that vanish or change without notice.
+Scraping creates legal exposure, broken trust and brittle integrations. A first-class marketplace needs explicit contracts, normalized shapes and license-aware flows, not reverse-engineered endpoints.
 
 #### The Rule:
-- **Catalog, not scraping.** Blessed providers: Unsplash, Pexels, Pixabay, Openverse, Wikimedia Commons, Sketchfab, Freesound, Poly Haven, AmbientCG, OpenGameArt, Google Custom Search JSON API. Each is a row in the AssetProvider registry with its public search API. Sources without a public search API (Pinterest, raw Google Images, Kenney, Quaternius, itch.io packs) are catalog-only rows with curated static manifests and hand-verified URLs, or excluded. Interface scraping is a defect.
-- **One normalized contract.** Every search result is an AssetRow (provider slug, id, title, author, license family, preview/download URLs, attribution, dimensions/duration, size). The UI never sees provider-specific shapes.
-- **License is a field, not a footnote.** Every row carries a license family; attribution is rendered before import; project export fails closed on UNKNOWN license.
-- **Downloads land in the cache.** AssetBroker_download streams into VexHome_cache(<subsystem>) with bounded timeouts (the Bounded Wait Law); cache files are shim state tracked and closed before Memory_freeAll (the Vertical Integration Law (Teardown)). No exec, no writes outside the cache.
-- **The UI seam is fn-pointers.** darling hosts AssetBrowser and never includes api-haven (the Vertical Integration Law); the R5 app binds an AssetSource fn-pointer table (opaque handle + callbacks — the Conflict Triage Law canonical move).
-- **MCP surface.** asset_source_lookup / asset_search / asset_download hosted by McpServer; writes cache-confined, timeouts bounded, no exec.
-- **Credentials.** API keys via vexspoke Keychain or ASSET_KEY_<SLUG> env rendered by ApiAuth; never stored in the arena, prefs, or repo.
+- **Catalog, not scraping.** Public-search providers: Unsplash, Pexels, Pixabay, Openverse, Wikimedia Commons, Sketchfab, Freesound, Poly Haven, AmbientCG, OpenGameArt, Google Custom Search JSON API. Pinterest, raw Google Images, Kenney, Quaternius and itch.io packs lack public search APIs: catalog-only with curated static manifests and hand-verified URLs, or excluded. Scraping is prohibited.
+- **One normalized contract.** Each result is an AssetRow: provider slug, id, title, author, license family, preview/download URLs, attribution, dimensions/duration and size. UI never sees provider-specific shapes.
+- **License is a field, not a footnote.** Every row carries a license family; render attribution before import; project export fails closed on UNKNOWN.
+- **Downloads land in the cache.** AssetBroker_download streams to VexHome_cache(<subsystem>) with bounded timeouts (Bounded Wait Law). Track cache files as shim state and close before Memory_freeAll (Vertical Integration Law (Teardown)); no exec or writes outside cache.
+- **The UI seam is fn-pointers.** Darling hosts AssetBrowser and never includes api-haven (Vertical Integration Law); R5 binds an AssetSource fn-pointer table (opaque handle + callbacks; Conflict Triage Law).
+- **MCP surface.** McpServer hosts asset_source_lookup / asset_search / asset_download; writes stay cache-confined, timeouts bounded, no exec.
+- **Credentials.** API keys come via vexspoke Keychain or ASSET_KEY_<SLUG> env rendered by ApiAuth; never arena, preferences or repo.
 
 ---
 
 ### Quarantined Attic Isolation Law
 
 #### Definition:
-All legacy Java source code and off-heap prototypes are permanently quarantined under `attic/`. Production C23 builds must never include, link, or reference any files in `attic/`.
+Legacy Java and off-heap prototypes stay permanently quarantined in `attic/`. Production C23 must never include, link or reference files in `attic/`.
 
 #### The Why:
-Historical code preserves context but must never pollute the pure C23 compilation unit or confuse static analysis tools.
+Historical context must not pollute C23 compilation or confuse static analysis.
 
 #### The Rule:
-1. **No Attic Includes:** Code in `src/api` or `src/com` must never include headers or references from `attic/`.
-2. **Build Isolation:** Production and workspace indexing configurations ignore `attic/` completely.
+1. **No Attic Includes:** `src/api` and `src/com` never include headers or references from `attic/`.
+2. **Build Isolation:** Production and workspace indexing configurations ignore `attic/` entirely.
 
 ---
 
 ### Zero-Allocation Telemetry Law
 
 #### Definition:
-Telemetry feeds, Server-Sent Events (SSE), and Model Context Protocol (MCP) message serialization operate strictly on pre-allocated circular buffers and arena memory with zero steady-state heap allocations.
+Telemetry feeds, SSE and MCP serialization use preallocated circular buffers and arena memory, with zero steady-state heap allocations.
 
 #### The Why:
-Network telemetry streams must not induce memory allocator churn or thread stalling in high-throughput API pipelines.
+Network telemetry must avoid allocator churn and thread stalls in high-throughput pipelines.
 
 #### The Rule:
-1. **Ring Buffering:** Inbound and outbound packets serialize into pre-allocated memory slots.
-2. **Bounded Capacity:** Overflow triggers structured backpressure or packet drops rather than emergency reallocations.
+1. **Ring Buffering:** Serialize inbound/outbound packets in preallocated slots.
+2. **Bounded Capacity:** Overflow triggers structured backpressure or packet drops, never emergency reallocations.
 
 ---
 
