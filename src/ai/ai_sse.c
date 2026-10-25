@@ -3,6 +3,16 @@
 #include "ai/ai_sse.h"
 
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The incremental Server-Sent Events decoder. It exists because a token stream
+ * arrives in arbitrary socket slices: the host polls a bound HavenWsFanout slot
+ * and feeds whatever arrived, and this class keeps the partial line, joins
+ * multi-line data: payloads and latches [DONE]. It never touches a socket,
+ * spawns a thread or allocates. Overlong lines flush mid-line so hostile input
+ * cannot overflow, and a full output buffer reports truncation rather than
+ * dropping text silently. */
 
 ;;OVERVIEW
 /**

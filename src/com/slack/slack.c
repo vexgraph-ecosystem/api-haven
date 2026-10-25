@@ -7,6 +7,13 @@
 #include "api/rest.h"
 #include "net/http.h"
 #include "net/json.h"
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The Slack webhook driver: it POSTs {"text","username","icon_url"} through the
+ * Rest core and owns no transport of its own. It exists as the second vendor on
+ * api/rest.h — proof that the core carries a vendor with zero transport code
+ * added beside it. No state is retained between calls. */
 
 ;;OVERVIEW
 /**

@@ -8,6 +8,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The Discord webhook client: text and rich-embed payloads rendered off-heap
+ * and transmitted through the vexspoke HTTP client. It exists as the vendor
+ * driver over the shared transport — it owns no socket and no buffer, and every
+ * payload is written into caller-owned storage. */
 
 ;;OVERVIEW
 /**

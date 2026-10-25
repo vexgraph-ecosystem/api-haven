@@ -6,6 +6,15 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The Anthropic Messages client: the same request shape as AiChat, rendered
+ * into a different wire contract. It exists so the provider row decides the
+ * family rather than the caller, and it borrows AiMessage from ai_chat.h
+ * instead of declaring a second turn record. Model, max_tokens and messages[]
+ * are written into caller-owned scratch, auth rides x-api-key, and the class
+ * holds no state across calls. */
 
 ;;OVERVIEW
 /**

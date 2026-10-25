@@ -4,6 +4,15 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** A catalog-only, read-only SQLite row: a borrowed path, capability caps, byte
+ * bounds and the owner's fn-table, with no sqlite3.h include or link. It exists
+ * so the directory can describe a SQLite source without owning a database
+ * engine; execution delegates through the bound opaque handle, and an unbound
+ * row drop-degrades to false. Read-only by construction — no write path exists
+ * on this class. */
 
 ;;OVERVIEW
 /**

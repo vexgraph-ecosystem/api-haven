@@ -5,6 +5,16 @@
 
 #include <stddef.h>
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The app/automation directory: 29 static descriptors naming the targets the
+ * AppBroker may drive, each with slug, display name, transport family,
+ * credential scheme and the bundle id / CLI / URL a driver resolves. It exists
+ * so a new target is a row, not a branch. Lookup is linear and allocates
+ * nothing; the table is immutable, so readers need no lock. Availability is
+ * runtime — a target whose driver is unbound reports UNAVAILABLE through the
+ * broker verdict rather than crashing the descriptor. */
 
 ;;OVERVIEW
 /**

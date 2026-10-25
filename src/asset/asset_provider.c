@@ -4,6 +4,15 @@
 
 #include <stddef.h>
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The external asset-source directory: 12 static descriptors over blessed public
+ * APIs plus catalog-only rows that carry a curated manifest and no search
+ * endpoint. It exists so an asset source is a row, not a code path, and each row
+ * carries one hand-verified sample so the broker path can be proved without
+ * scraping or network. Lookup is linear, allocation-free, and the table is
+ * immutable. */
 
 ;;OVERVIEW
 /**

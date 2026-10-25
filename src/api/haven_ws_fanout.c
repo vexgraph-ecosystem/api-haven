@@ -4,6 +4,15 @@
 #include "annotation/overview.h"
 
 #include <stdlib.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** A fixed fan-out table over opaque socket handles. It exists so R2 can drive
+ * several sockets from one tick without owning a socket API: at most 16 slots,
+ * each pairing a borrowed handle with its WsSource callback table, advanced by
+ * HavenWsFanout_pollStep under a millisecond budget. The callbacks are the
+ * external seam — no socket adapter lives in this workspace — and FrameInbox is
+ * a bounded byte inbox, not a transport. */
 
 ;;OVERVIEW
 /**

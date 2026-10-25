@@ -4,6 +4,16 @@
 #include "app/app_broker.h"
 
 #include <stddef.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The bounded app/automation action seam. It exists so a driver call cannot
+ * outlive its slot: each action owns one entry in a fixed jobs[] array, a
+ * per-slot timeout bounds the driver wait, and a per-slot cancel gives teardown
+ * its bounded join. Preconditions (target, driver, action) are validated before
+ * a slot is issued, so a rejected action consumes nothing. No osascript, no IPC,
+ * no sockets, no threads, no allocation — execution runs behind the injected
+ * AppDriverTable. */
 
 ;;OVERVIEW
 /**

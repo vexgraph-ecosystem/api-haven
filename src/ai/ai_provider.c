@@ -4,6 +4,15 @@
 
 #include <stddef.h>
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The provider directory. It exists so the engine gains or loses a provider by
+ * editing a row instead of a code path: ~260 static descriptors carry name,
+ * endpoint, wire family, auth scheme and region bucket, read by linear slug
+ * lookup. The table is immutable and the lookup allocates nothing, so
+ * concurrent readers need no lock. It resolves identity only — no request is
+ * ever sent from here. */
 
 ;;OVERVIEW
 /**

@@ -5,6 +5,15 @@
 
 #include "annotation/overview.h"
 #include "net/url.h"
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The one place a request becomes bytes: URL parsing, auth injection and HTTP
+ * transport. It exists so drivers hand over (url, auth, JSON body) and get an
+ * HttpResponse in their own buffer instead of re-implementing transport. Success
+ * means a completed transfer AND a 2xx status; a 4xx/5xx/3xx keeps the status
+ * and body in the caller's response for inspection, and a required credential
+ * that cannot be rendered fails closed before anything is sent. */
 
 ;;OVERVIEW
 /**

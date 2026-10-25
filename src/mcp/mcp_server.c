@@ -20,6 +20,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The Model Context Protocol engine: a newline-delimited JSON-RPC 2.0 core that
+ * hosts the connector shapes as MCP tools and resources. It exists so the tool
+ * surface is described by tables rather than by control flow — the handshake,
+ * ping and tool/resource dispatch all read the same immutable McpToolSlot /
+ * McpResourceSlot records, each handler a bare fn pointer into render logic.
+ * Zero allocation, no network, single-threaded. */
 
 ;;OVERVIEW
 /**

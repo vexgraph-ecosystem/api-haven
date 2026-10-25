@@ -4,6 +4,14 @@
 
 #include <stddef.h>
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The database data-source directory: 25 static descriptors naming the engines
+ * with complete driver support, each with slug, display name, driver/engine key,
+ * canonical wire port and coarse wire family. It exists so a database is a row,
+ * not a branch. Lookup is linear and allocation-free, and the table is
+ * immutable, so readers need no lock. */
 
 ;;OVERVIEW
 /**

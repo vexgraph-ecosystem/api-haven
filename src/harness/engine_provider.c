@@ -4,6 +4,14 @@
 
 #include <stddef.h>
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The CLI coding-engine directory: 20 static descriptors naming the engines the
+ * Harness may drive, each with slug, display name, CLI binary, transport family
+ * and credential scheme. It exists so an engine is a row, not a branch. Lookup
+ * is linear and allocation-free and the table is immutable. Execution lives
+ * behind the injected HarnessDriverTable — this file never spawns. */
 
 ;;OVERVIEW
 /**

@@ -3,6 +3,15 @@
 #include "asset/asset_broker.h"
 
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The download-to-cache seam. It exists so a stream arrives as copies the caller
+ * can afford: the host feeds 64KiB chunk Bytes and the broker copies them into
+ * caller-owned dest at the usedLen cursor, one 100ms budget and one cancel flag
+ * per chunk. A dead source drops one chunk and teardown still joins; dest
+ * overflow reports truncation instead of dropping silently. A value struct — no
+ * sockets, no threads, no allocation, no exec, no vendor SDK. */
 
 ;;OVERVIEW
 /**

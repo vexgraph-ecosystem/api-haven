@@ -8,6 +8,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The engine's own telemetry client: it formulates JSON packets off-heap and
+ * transmits them over HTTP. It exists as the seam between the engine and the
+ * transport, and it keeps every packet in caller-owned storage so a send costs
+ * no allocation and leaves nothing behind. */
 
 ;;OVERVIEW
 /**

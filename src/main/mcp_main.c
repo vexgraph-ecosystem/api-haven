@@ -3,6 +3,16 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The stdio transport for McpServer, and nothing else. It exists so the protocol
+ * engine never learns about file descriptors: stdin is read as newline-delimited
+ * JSON-RPC, each line goes to McpServer_handleLine, and the response is written
+ * to stdout and flushed at once because clients block on the pipe. stdout is the
+ * wire and carries no log byte; stderr carries every diagnostic. A line past
+ * 64 KiB is drained and answered with a parse error so the stream never desyncs,
+ * and EOF exits 0. */
 
 ;;OVERVIEW
 /**

@@ -4,6 +4,14 @@
 #include <string.h>
 
 #include "annotation/overview.h"
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** One request's authentication, in one struct. It exists so the Rest core never
+ * grows a per-vendor header builder: a driver fills ApiAuth and the core renders
+ * it. Every string is borrowed from caller-owned stable storage and rendering
+ * writes into the caller's buffer, so the class owns no memory and frees
+ * nothing. */
 
 ;;OVERVIEW
 /**

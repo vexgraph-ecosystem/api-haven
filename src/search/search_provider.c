@@ -4,6 +4,15 @@
 
 #include <stddef.h>
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The blessed web-search directory: 3 static descriptors (searxng, google-cse,
+ * wikimedia) with slug, display name, wire family, credential scheme and endpoint
+ * base. It exists so a search backend is a row, not a branch; queries run through
+ * api/rest.h in the MCP renderer, never here. Calling a documented API and
+ * parsing its documented JSON is a client using a contract — scraping is not
+ * something this class does. */
 
 ;;OVERVIEW
 /**

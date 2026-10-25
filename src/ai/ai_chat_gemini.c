@@ -6,6 +6,15 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The Gemini generateContent client: the same request shape as AiChat, with
+ * the model riding the URL instead of the body and the role vocabulary
+ * translated on the way out ("assistant" becomes "model", "system" folds into
+ * "user"). It borrows AiMessage from ai_chat.h rather than declaring a second
+ * turn record, renders into caller-owned scratch, authenticates with
+ * x-goog-api-key, and retains nothing between calls. */
 
 ;;OVERVIEW
 /**

@@ -3,6 +3,15 @@
 #include "harness/harness.h"
 
 #include <stddef.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The bounded CLI-engine job seam. It exists so a driver wait cannot outlive its
+ * slot: each job owns one entry in a fixed jobs[] array, a per-slot timeout
+ * bounds every wait, and a per-slot cancel gives teardown its bounded join.
+ * Preconditions (engine, driver, prompt) are validated before a slot is issued,
+ * so a rejected run consumes nothing. No exec, no threads, no allocation —
+ * spawn/poll/cancel run behind the injected HarnessDriverTable. */
 
 ;;OVERVIEW
 /**

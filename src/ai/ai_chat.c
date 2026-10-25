@@ -6,6 +6,15 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "annotation/definition.h"
+
+;;DEFINITION
+/** The OpenAI-compatible chat client, and the shape its two sisters follow. A
+ * provider row becomes a request here: the row resolves to a native endpoint
+ * (falling back to the family default), the chat/completions envelope is
+ * rendered into caller-owned scratch, and Rest_postJson carries it. Nothing is
+ * retained between calls — no socket, no thread, no owned buffer — so the class
+ * is a function over (provider row, messages, scratch). */
 
 ;;OVERVIEW
 /**
