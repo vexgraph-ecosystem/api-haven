@@ -34,7 +34,7 @@ opens a connection itself.
 and path into caller-sized buffers, so a malformed URL cannot overrun. That is a
 *parse*, not a policy.
 
-**Not implemented:** nothing in `src/` rejects a metadata address
+**Not implemented:** nothing in `src` rejects a metadata address
 (`169.254.169.254`), localhost, a LAN range, `file://`, an IPv6 loopback or
 userinfo abuse — those tokens appear nowhere in the tree. Redirect classification
 and cross-origin credential stripping are likewise absent.
